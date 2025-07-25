@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>Подача заявки</title>
+
+</head>
+<body>
+
+<div class="form-container">
+    <div class="header">
+        <a href="{% url 'apply' %}" ><h2>Форма подачи заявки</h2></a>
+         <nav class="menu">
+            <div><a href="{% url 'hr_applications' %}" >HR</a></div>
+        </nav>
+    </div>
+       <h3>Вы уже подавали заявку, повторная подача невозможна!!!</h3>
+
+    </form>
+</div>
+
+</body>
+</html>

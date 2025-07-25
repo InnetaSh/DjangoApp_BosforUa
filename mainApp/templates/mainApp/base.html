@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>bosfor.ua</title>
+
+</head>
+<body>
+
+<div class="mainContainer">
+    <nav class="header">
+      <div class="container">
+        <div class="left-menu">
+          <a href="{% url 'home' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo" />
+          </a>
+        </div>
+        <div class="right-menu">
+          <a href="#" class="menu-item">
+            <i class="fas fa-headset"></i>
+            <span>Служба підтримки</span>
+          </a>
+          <a href="#" class="menu-item">
+            <i class="fas fa-user"></i>
+            <span>Особистий кабінет</span>
+          </a>
+        </div>
+      </div>
+  <div class="wrapper">
+      <div class="redirectionWrapper">
+          <div class="left-content">
+            <div class="redirectionInfo">
+                <span class="redirectionInfoTitle">
+                    Busfor приєднується до BlaBlaCar
+                </span>
+                <span class="redirectionInfoSubTitle">
+                    Такий самий широкий вибір автобусних поїздок.
+                </span>
+                <span class="redirectionInfoSubTitle">
+                    Тепер доступний на BlaBlaCar
+                </span>
+            </div>
+          </div>
+          <div class="right-content">
+              <a href="https://www.blablacar.com.ua/bus">
+                  <img src="{% static 'img/redirection-header-logo.svg' %}" alt="redirection-logo">
+              </a>
+          </div>
+      </div>
+      <div class="formWrapper">
+
+      </div>
+  </div>
+
+    </div>
+    </nav>
+
+
+</div>
+
+</body>
+</html>
