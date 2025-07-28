@@ -32,37 +32,97 @@
           </a>
         </div>
       </div>
-  <div class="wrapper">
-      <div class="redirectionWrapper">
-          <div class="left-content">
-            <div class="redirectionInfo">
-                <span class="redirectionInfoTitle">
-                    Busfor приєднується до BlaBlaCar
-                </span>
-                <span class="redirectionInfoSubTitle">
-                    Такий самий широкий вибір автобусних поїздок.
-                </span>
-                <span class="redirectionInfoSubTitle">
-                    Тепер доступний на BlaBlaCar
-                </span>
+    </nav>
+      <div class="wrapper">
+          <div class="redirectionWrapper">
+              <div class="left-content">
+                <div class="redirectionInfo">
+                    <span class="redirectionInfoTitle">
+                        Busfor приєднується до BlaBlaCar
+                    </span>
+                    <span class="redirectionInfoSubTitle">
+                        Такий самий широкий вибір автобусних поїздок.
+                    </span>
+                    <span class="redirectionInfoSubTitle">
+                        Тепер доступний на BlaBlaCar
+                    </span>
+                </div>
+              </div>
+              <div class="right-content">
+                  <a href="https://www.blablacar.com.ua/bus">
+                      <img src="{% static 'img/redirection-header-logo.svg' %}" alt="redirection-logo">
+                  </a>
+              </div>
+          </div>
+          <div class="formWrapper">
+              <form method="post">
+                  {% csrf_token %}
+                  <div class="left-form-block">
+                    {% for field in form %}
+                      <div class="form-row{% if forloop.first %} first{% endif %}">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                      </div>
+                    {% endfor %}
+                  </div>
+
+                  <div class="right-form-block">
+                    <div class="form-row-bnt">
+                      <button type="submit" class="btn">🔍 Знайти квитки</button>
+                    </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+
+      <div class="footer">
+          <div class="footer-topBlock">
+                <span class="footer-InfoTitle">
+                Квитки на автобус
+            </span>
+            <span class="footer-InfoSubTitle">
+                по Україні, Польщі та Європі
+            </span>
+          <div class="footer-topBlock-Info">
+              {% for item in features %}
+                <div class="footer-topBlock-InfoElement">
+                  <img src="{% static item.icon %}" alt="Icon" class="logo-small" />
+                  <div>
+                    <span class="footer-topBlock-InfoElement-title">{{ item.title }}</span>
+                    <span class="footer-topBlock-InfoElement-SubTitle">{{ item.subtitle }}</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          <div class="footer-aboutBlock">
+            <span class="footer-InfoTitle">
+                Чому обирають Busfor
+            </span>
+            <div class="footer-aboutBlock-Info">
+              {% for item in about %}
+                <div class="footer-aboutBlock-InfoElement">
+
+                    <span class="footer-topBlock-InfoElement-title">{{ item.title }}</span>
+                    <span class="footer-topBlock-InfoElement-description"> <p>{{ item.description|safe }}</p></span>
+
+                </div>
+              {% endfor %}
             </div>
           </div>
-          <div class="right-content">
-              <a href="https://www.blablacar.com.ua/bus">
-                  <img src="{% static 'img/redirection-header-logo.svg' %}" alt="redirection-logo">
-              </a>
+          <div class="footer-routesBlock">
+
+          </div>
+          <div class="footer-infoBlock">
+
           </div>
       </div>
-      <div class="formWrapper">
 
-      </div>
-  </div>
+
+
+
 
     </div>
-    </nav>
-
-
-</div>
 
 </body>
 </html>
