@@ -125,41 +125,184 @@ def home(request):
         ]
         international= [
             {
-                'from_': 'Київ',
-                '_to': 'Варшава',
+                'from_city': 'Київ',
+                'to_city': 'Варшава',
             },
             {
-                'from_': 'Львів',
-                '_to': 'Варшава',
+                'from_city': 'Львів',
+                'to_city': 'Варшава',
             },
             {
-                'from_': 'Варшава',
-                '_to': 'Київ',
+                'from_city': 'Варшава',
+                'to_city': 'Київ',
             },
             {
-                'from_': 'Варшава',
-                '_to': 'Львів',
+                'from_city': 'Варшава',
+                'to_city': 'Львів',
             },
             {
-                'from_': 'Львів',
-                '_to': 'Краків',
+                'from_city': 'Львів',
+                'to_city': 'Краків',
             },
             {
-                'from_': 'Київ',
-                '_to': 'Краків',
+                'from_city': 'Київ',
+                'to_city': 'Краків',
             },
             {
-                'from_': 'Львів',
-                '_to': 'Прага',
+                'from_city': 'Львів',
+                'to_city': 'Прага',
             },
             {
-                'from_': 'Київ',
-                '_to': 'Прага',
+                'from_city': 'Київ',
+                'to_city': 'Прага',
+            },
+        ]
+        internal=[
+            {
+                'from_city': 'Київ',
+                'to_city': 'Одеса',
+            },
+            {
+                'from_city': 'Одеса',
+                'to_city': 'Київ',
+            },
+            {
+                'from_city': 'Київ',
+                'to_city': 'Львів',
+            },
+            {
+                'from_city': 'Львів',
+                'to_city': 'Київ',
+            },
+            {
+                'from_city': 'Київ',
+                'to_city': 'Харків',
+            },
+            {
+                'from_city': 'Харків',
+                'to_city': 'Київ',
+            },
+            {
+                'from_city': 'Київ',
+                'to_city': 'Дніпро',
+            },
+            {
+                'from_city': 'Дніпро',
+                'to_city': 'Київ',
+            },
+            {
+                'from_city': 'Київ',
+                'to_city': 'Запоріжжя',
             },
         ]
 
-    return render(request, 'mainApp/base.html',{
+    info = [
+        {
+            'title': 'Про нас',
+        },
+        {
+            'title': 'Питання та відповіді',
+        },
+        {
+            'title': 'Повернути квитки',
+        },
+        {
+            'title': 'Блог',
+        },
+        {
+            'title': 'Контакти',
+        },
+    ]
+    partners = [
+        {
+            'title': 'Перевізникам',
+        },
+        {
+            'title': 'Агентам',
+        },
+        {
+            'title': 'Партнерська програма',
+        },
+        {
+            'title': 'Автобусні перевізники',
+        },
+    ]
+    document = [
+        {
+            'title': 'Договір оферти',
+        },
+        {
+            'title': 'Політика конфіденційності',
+        },
+    ]
+    mobileApp = [
+        {
+            'icon': 'img/download-onAppStore-logo.png',
+        },
+        {
+            'icon': 'img/download-onGooglePlay-logo.png',
+        },
+    ]
+    socialMediaApp = [
+        {
+            'icon': 'img/SocialMediaApps-logo.png',
+        },
+    ]
+
+
+    routes_blocks = [
+        {
+            'type': 'list',
+            'items': countries
+        },
+        {
+            'type': 'list',
+            'items': schedule
+        },
+        {
+            'type': 'pair',
+            'items': international
+        },
+        {
+            'type': 'pair',
+            'items': internal
+        },
+    ]
+    footer_blocks = [
+        {
+            'type': 'list',
+            'title':'Інформація',
+            'items': info
+        },
+        {
+            'type': 'list',
+            'title': 'Партнерам',
+            'items': partners
+        },
+        {
+            'type': 'list',
+            'title': 'Документи',
+            'items': document
+        },
+    ]
+    footer_blocks_img = [
+        {
+            'type': 'img',
+            'title': 'Мобільний додаток',
+            'items': mobileApp
+        },
+        {
+            'type': 'img',
+            'title': 'Ми в соцмережах',
+            'items': socialMediaApp
+        },
+    ]
+
+    return render(request, 'mainApp/base.html', {
         'form': form,
-         'features': features,
-        'about':about
+        'features': features,
+        'about': about,
+        'routes_blocks': routes_blocks,
+        'footer_blocks': footer_blocks,
+        'footer_blocks_img':footer_blocks_img
     })

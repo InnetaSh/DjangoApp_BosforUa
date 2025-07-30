@@ -7,6 +7,7 @@
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <title>bosfor.ua</title>
 
@@ -33,90 +34,172 @@
         </div>
       </div>
     </nav>
-      <div class="wrapper">
-          <div class="redirectionWrapper">
-              <div class="left-content">
-                <div class="redirectionInfo">
-                    <span class="redirectionInfoTitle">
-                        Busfor приєднується до BlaBlaCar
-                    </span>
-                    <span class="redirectionInfoSubTitle">
-                        Такий самий широкий вибір автобусних поїздок.
-                    </span>
-                    <span class="redirectionInfoSubTitle">
-                        Тепер доступний на BlaBlaCar
-                    </span>
-                </div>
-              </div>
-              <div class="right-content">
-                  <a href="https://www.blablacar.com.ua/bus">
-                      <img src="{% static 'img/redirection-header-logo.svg' %}" alt="redirection-logo">
-                  </a>
-              </div>
+  <div class="wrapper blue-background">
+      <div class="redirectionWrapper">
+          <div class="left-content">
+            <div class="redirectionInfo">
+                <span class="redirectionInfoTitle">
+                    Busfor приєднується до BlaBlaCar
+                </span>
+                <span class="redirectionInfoSubTitle">
+                    Такий самий широкий вибір автобусних поїздок.
+                </span>
+                <span class="redirectionInfoSubTitle">
+                    Тепер доступний на BlaBlaCar
+                </span>
+            </div>
           </div>
-          <div class="formWrapper">
-              <form method="post">
-                  {% csrf_token %}
-                  <div class="left-form-block">
-                    {% for field in form %}
-                      <div class="form-row{% if forloop.first %} first{% endif %}">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {{ field.errors }}
-                      </div>
-                    {% endfor %}
-                  </div>
-
-                  <div class="right-form-block">
-                    <div class="form-row-bnt">
-                      <button type="submit" class="btn">🔍 Знайти квитки</button>
-                    </div>
-                  </div>
-              </form>
+          <div class="right-content">
+              <a href="#">
+                  <img src="{% static 'img/redirection-header-logo.svg' %}" alt="redirection-logo">
+              </a>
           </div>
       </div>
+      <div class="formWrapper">
+          <form method="post">
+              {% csrf_token %}
+              <div class="left-form-block">
+                {% for field in form %}
+                  <div class="form-row{% if forloop.first %} first{% endif %}">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                  </div>
+                {% endfor %}
+              </div>
 
-      <div class="footer">
-          <div class="footer-topBlock">
-                <span class="footer-InfoTitle">
+              <div class="right-form-block">
+                <div class="form-row-bnt">
+                  <button type="submit" class="btn">🔍 Знайти квитки</button>
+                </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+    <div class="wrapper showBlock">
+        <div class="formWrapperTop">
+          <form method="post">
+              {% csrf_token %}
+              <div class="left-form-block">
+                {% for field in form %}
+                  <div class="form-row{% if forloop.first %} first{% endif %}">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                  </div>
+                {% endfor %}
+              </div>
+
+              <div class="right-form-block">
+                <div class="form-row-bnt">
+                  <button type="submit" class="btn">🔍 Знайти квитки</button>
+                </div>
+              </div>
+          </form>
+    </div>
+          <div class="wrapper-redirectionBlock">
+                <span class="redirectionBlock-InfoTitle">
                 Квитки на автобус
             </span>
-            <span class="footer-InfoSubTitle">
+            <span class="redirectionBlock-InfoSubTitle">
                 по Україні, Польщі та Європі
             </span>
-          <div class="footer-topBlock-Info">
+          </div>
+          <div class="wrapper-Info">
               {% for item in features %}
-                <div class="footer-topBlock-InfoElement">
+                <div class="wrapper-info-element">
                   <img src="{% static item.icon %}" alt="Icon" class="logo-small" />
                   <div>
-                    <span class="footer-topBlock-InfoElement-title">{{ item.title }}</span>
-                    <span class="footer-topBlock-InfoElement-SubTitle">{{ item.subtitle }}</span>
+                    <span class="wrapper-info-element-title">{{ item.title }}</span>
+                    <div class="wrapper-info-element-SubTitle">{{ item.subtitle }}</div>
                   </div>
                 </div>
               {% endfor %}
             </div>
-          <div class="footer-aboutBlock">
-            <span class="footer-InfoTitle">
+          <div class="wrapper-aboutBlock">
+            <div class="wrapper-InfoTitle">
                 Чому обирають Busfor
-            </span>
-            <div class="footer-aboutBlock-Info">
+            </div>
+            <div class="wrapper-aboutBlock-Info">
               {% for item in about %}
-                <div class="footer-aboutBlock-InfoElement">
+                <div class="wrapper-aboutBlock-InfoElement">
 
-                    <span class="footer-topBlock-InfoElement-title">{{ item.title }}</span>
-                    <span class="footer-topBlock-InfoElement-description"> <p>{{ item.description|safe }}</p></span>
+                    <span class="wrapper-aboutBlock-InfoElement-title">{{ item.title }}</span>
+                    <span class="wrapper-aboutBlock-InfoElement-description"> <p>{{ item.description|safe }}</p></span>
 
                 </div>
               {% endfor %}
             </div>
           </div>
-          <div class="footer-routesBlock">
+         <div class="wrapper-routesBlock">
+            {% for block in routes_blocks %}
+                <div class="wrapper-routesBlock-elements">
+                    {% for item in block.items %}
+                        {% if block.type == 'list' %}
+                            <a class="wrapper-routesBlock-elements-title">{{ item.title }}</a>
+                        {% elif block.type == 'pair' %}
+                            <a class="wrapper-routesBlock-elements-title">{{ item.from_city }} &rarr; {{ item.to_city }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+   <div class="footer">
+        <div class="footer-partners">
+            <div class="partners-container">
+                <div class="partners__item ua-favorit">
+                    <img src="https://busfor.ua/assets/payment/ua-favorit-012d01a187748106ef283a89e2f8283ffee7359ec64ffe86a4028f819581a846.png">
+                </div>
+                <div class="partners__item ua-prize">
+                    <img src="https://busfor.ua/assets/payment/ua-prize-593b379448d869e57d242bb039a1ef2402fa2440706cbf27c2939a03e8727929.png">
+                </div>
+                <div class="partners__item vuso">
+                    <img src="https://busfor.ua/assets/payment/vuso-7a6b2a883334689f42bc6a0509972e63e8319fdf5531c4f6c7a575773ba283bf.svg">
+                </div>
+                <div class="partners__item maestro">
+                    <img src="https://busfor.ua/assets/payment/maestro-9f0c09cb9be8dffba15d576cca4f0d6f6fc9f7968a22a2c50c310712d7864602.svg">
+                </div>
+                <div class="partners__item mastercard">
+                    <img src="https://busfor.ua/assets/payment/mastercard-d160f8e3585198a0dd65a7a3d49d858489536cd6969f1ec134dd38b2a4a82b35.svg">
+                </div>
+                <div class="partners__item visa">
+                    <img src="https://busfor.ua/assets/payment/visa-aa48a736f2aadd9c1b26b663f1dcb7de9af32490bf05fc4de878825735bf16eb.svg">
+                </div>
+            </div>
+        </div>
 
-          </div>
-          <div class="footer-infoBlock">
+         <div class="footer-dotua">
+            <div class="dotua-container">
+                <div class="dotua-container-row3">
+                {% for block in footer_blocks %}
+                    <div class="dotua-container-col">
+                        <h3>{{ block.title }}</h3>
 
-          </div>
-      </div>
+                            {% for item in block.items %}
+                                    <a>{{ item.title }}</a>
+                            {% endfor %}
+
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="dotua-container-row2">
+                    {% for block in footer_blocks_img %}
+                    <div class="dotua-container-col">
+                        <h3>{{ block.title }}</h3>
+                        <div  class="dotua-container-col-img">
+                            {% for item in block.items %}
+                                  <img src="{% static item.icon %}" alt="Icon"  />
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+
+  </div>
 
 
 
@@ -124,5 +207,25 @@
 
     </div>
 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const formWrapperTop = document.querySelector('.formWrapperTop');
+    const wrapper = document.querySelector('.showBlock');
+
+    function checkPosition() {
+      const rect = wrapper.getBoundingClientRect();
+
+     if (rect.top <= 0) {
+        formWrapperTop.classList.add('visible');
+      } else {
+        formWrapperTop.classList.remove('visible');
+      }
+    }
+
+    window.addEventListener('scroll', checkPosition);
+    window.addEventListener('resize', checkPosition);
+  });
+</script>
 </body>
 </html>
