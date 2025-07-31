@@ -2,51 +2,41 @@
 {% load static %}
 <html>
 <head>
-    <meta charset="utf-8" />
-     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+     <meta charset="utf-8" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <title>bosfor.ua</title>
-
 </head>
 <body>
-
 <div class="mainContainer">
     <nav class="header">
-      <div class="container">
-        <div class="left-menu">
-          <a href="{% url 'home' %}">
-            <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo" />
-          </a>
+        <div class="container">
+            <div class="left-menu">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo" class="logo" />
+                </a>
+            </div>
+            <div class="right-menu">
+                <a href="#" class="menu-item">
+                    <i class="fas fa-headset"></i>
+                    <span>Служба підтримки</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-user"></i>
+                    <span>Особистий кабінет</span>
+                </a>
+            </div>
         </div>
-        <div class="right-menu">
-          <a href="#" class="menu-item">
-            <i class="fas fa-headset"></i>
-            <span>Служба підтримки</span>
-          </a>
-          <a href="#" class="menu-item">
-            <i class="fas fa-user"></i>
-            <span>Особистий кабінет</span>
-          </a>
-        </div>
-      </div>
     </nav>
-  <div class="wrapper blue-background">
-      <div class="redirectionWrapper">
+
+  <div class="main-wrapper  bg-primary">
+      <div class="announcement-banner">
           <div class="left-content">
-            <div class="redirectionInfo">
-                <span class="redirectionInfoTitle">
-                    Busfor приєднується до BlaBlaCar
-                </span>
-                <span class="redirectionInfoSubTitle">
-                    Такий самий широкий вибір автобусних поїздок.
-                </span>
-                <span class="redirectionInfoSubTitle">
-                    Тепер доступний на BlaBlaCar
-                </span>
+            <div class="banner-content">
+                  <span class="title-base banner-title">Busfor приєднується до BlaBlaCar</span>
+                  <span class="subtitle-base banner-subtitle">Такий самий широкий вибір автобусних поїздок.</span>
+                  <span class="subtitle-base banner-subtitle">Тепер доступний на BlaBlaCar</span>
             </div>
           </div>
           <div class="right-content">
@@ -55,10 +45,11 @@
               </a>
           </div>
       </div>
-      <div class="formWrapper">
+
+      <div class=" form-section">
           <form method="post">
               {% csrf_token %}
-              <div class="left-form-block">
+              <div class="form-fields">
                 {% for field in form %}
                   <div class="form-row{% if forloop.first %} first{% endif %}">
                     {{ field.label_tag }}
@@ -67,21 +58,20 @@
                   </div>
                 {% endfor %}
               </div>
-
-              <div class="right-form-block">
-                <div class="form-row-bnt">
-                  <button type="submit" class="btn">🔍 Знайти квитки</button>
+              <div class="form-submit">
+                <div class="form-button-row">
+                  <button type="submit" class="btn btn-primary">🔍 Знайти квитки</button>
                 </div>
               </div>
           </form>
       </div>
   </div>
 
-    <div class="wrapper showBlock">
-        <div class="formWrapperTop">
+    <div class="main-wrapper  showBlock">
+        <div class="form-fixed-top">
           <form method="post">
               {% csrf_token %}
-              <div class="left-form-block">
+              <div class="form-fields">
                 {% for field in form %}
                   <div class="form-row{% if forloop.first %} first{% endif %}">
                     {{ field.label_tag }}
@@ -90,62 +80,60 @@
                   </div>
                 {% endfor %}
               </div>
-
-              <div class="right-form-block">
-                <div class="form-row-bnt">
-                  <button type="submit" class="btn">🔍 Знайти квитки</button>
+              <div class="form-submit">
+                <div class="form-submit">
+                  <button type="submit" class="btn  btn-primar">🔍 Знайти квитки</button>
                 </div>
               </div>
           </form>
     </div>
-          <div class="wrapper-redirectionBlock">
-                <span class="redirectionBlock-InfoTitle">
-                Квитки на автобус
-            </span>
-            <span class="redirectionBlock-InfoSubTitle">
-                по Україні, Польщі та Європі
-            </span>
-          </div>
-          <div class="wrapper-Info">
+
+        <div class="redirection-section">
+            <span class="section-title">Квитки на автобус</span>
+            <span class="section-subtitle">по Україні, Польщі та Європі</span>
+        </div>
+
+          <div class="features-grid">
               {% for item in features %}
-                <div class="wrapper-info-element">
+                <div class="feature-item">
                   <img src="{% static item.icon %}" alt="Icon" class="logo-small" />
                   <div>
-                    <span class="wrapper-info-element-title">{{ item.title }}</span>
-                    <div class="wrapper-info-element-SubTitle">{{ item.subtitle }}</div>
+                    <span class="title-base feature-item-title">{{ item.title }}</span>
+                    <div class="subtitle-base feature-item-subtitle">{{ item.subtitle }}</div>
                   </div>
                 </div>
               {% endfor %}
             </div>
-          <div class="wrapper-aboutBlock">
-            <div class="wrapper-InfoTitle">
-                Чому обирають Busfor
-            </div>
-            <div class="wrapper-aboutBlock-Info">
+
+          <div class="about-section">
+            <div class="title-base section-title">Чому обирають Busfor</div>
+            <div class="about-feature">
               {% for item in about %}
-                <div class="wrapper-aboutBlock-InfoElement">
-
-                    <span class="wrapper-aboutBlock-InfoElement-title">{{ item.title }}</span>
-                    <span class="wrapper-aboutBlock-InfoElement-description"> <p>{{ item.description|safe }}</p></span>
-
+                <div class="about-feature-item">
+                    <span class="title-base about-feature-title">{{ item.title }}</span>
+                    <span class="subtitle-base  about-feature-description">
+                        <p>{{ item.description|safe }}</p>
+                    </span>
                 </div>
               {% endfor %}
             </div>
           </div>
-         <div class="wrapper-routesBlock">
+
+         <div class="routes-list">
             {% for block in routes_blocks %}
-                <div class="wrapper-routesBlock-elements">
+                <div class="routes-column">
                     {% for item in block.items %}
                         {% if block.type == 'list' %}
-                            <a class="wrapper-routesBlock-elements-title">{{ item.title }}</a>
+                            <a class="title-base route-title">{{ item.title }}</a>
                         {% elif block.type == 'pair' %}
-                            <a class="wrapper-routesBlock-elements-title">{{ item.from_city }} &rarr; {{ item.to_city }}</a>
+                            <a class="title-base route-title">{{ item.from_city }} &rarr; {{ item.to_city }}</a>
                         {% endif %}
                     {% endfor %}
                 </div>
             {% endfor %}
         </div>
     </div>
+
    <div class="footer">
         <div class="footer-partners">
             <div class="partners-container">
@@ -198,19 +186,13 @@
                 </div>
             </div>
         </div>
-
   </div>
-
-
-
-
-
     </div>
 
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const formWrapperTop = document.querySelector('.formWrapperTop');
+    const formWrapperTop = document.querySelector('.form-fixed-top');
     const wrapper = document.querySelector('.showBlock');
 
     function checkPosition() {
