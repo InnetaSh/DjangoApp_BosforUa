@@ -8,10 +8,60 @@ class City(models.Model):
 
 
 class Ticket(models.Model):
-    from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='departures', verbose_name="З міста")
-    to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='arrivals', verbose_name="У місто")
+    from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='ticket_departures', verbose_name="З міста")
+    to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='ticket_arrivals', verbose_name="У місто")
     date_travel = models.DateField(verbose_name="Дата поїздки")
     count_passenger = models.PositiveIntegerField(verbose_name="Кількість пасажирів")
 
     def __str__(self):
         return f"{self.from_city} → {self.to_city} на {self.date_travel} ({self.count_passenger} пасажирів)"
+
+
+
+
+
+class Route(models.Model):
+    from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_departures', verbose_name="З міста")
+    to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_arrivals', verbose_name="У місто")
+    departure_datetime = models.DateTimeField(verbose_name="Дата та час відправлення")
+    arrival_datetime = models.DateTimeField(verbose_name="Дата та час прибуття")
+    price_travel = models.DecimalField(verbose_name="Ціна поїздки", max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return (
+            f"{self.from_city} → {self.to_city} "
+            f"({self.departure_datetime:%d.%m %H:%M} - {self.arrival_datetime:%d.%m %H:%M}) "
+            f"за ціною {self.price_travel} $"
+        )
+
+
+class Trip(models.Model):
+    number_trip = models.PositiveIntegerField(verbose_name="Номер рейсу")
+
+    def __str__(self):
+        return f"Рейс №{self.number_trip}"
+
+    def get_ordered_routes(self):
+        return [tr.route for tr in self.trip_routes.order_by('order')]
+
+    def is_valid_route_sequence(self):
+        ordered = self.get_ordered_routes()
+        for i in range(len(ordered) - 1):
+            if ordered[i].to_city != ordered[i + 1].from_city:
+                return False
+        return True
+
+
+class TripRoute(models.Model):
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='trip_routes')
+    route = models.ForeignKey(Route, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.trip} – {self.route} (#{self.order})"
+
+
+

@@ -1,0 +1,82 @@
+{% extends "mainApp/base.html" %}
+{% load static %}
+{% block content %}
+ <div class="main-wrapper  ">
+<h1>Создать рейс</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ trip_form.as_p }}
+    {{ formset.management_form }}
+
+    <div id="form-container">
+      {% for form in formset %}
+        <div class="form-block">
+          {% for field in form %}
+            {{ field.label_tag }} {{ field }}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" id="add-form">＋ добавить маршрут</button>
+    <button type="submit">Зберегти рейс</button>
+  </form>
+
+  <template id="form-template">
+    <div class="form-block">
+      __FORM_HTML__
+    </div>
+  </template>
+ </div>
+  <script>
+  const totalForms = $('#id_form-TOTAL_FORMS');
+  let formIndex = parseInt(totalForms.val());
+
+  // Заготовка HTML новой формы маршрута
+  const emptyFormTemplate = `
+    <!-- FROM_CITY будет подставлено динамически ниже -->
+
+    <label for="id_form-__prefix__-to_city">Место прибытия:</label>
+    <select name="form-__prefix__-to_city" id="id_form-__prefix__-to_city">
+      {{ formset.empty_form.to_city.field.choices|safe }}
+    </select>
+
+    <label for="id_form-__prefix__-departure_datetime">Время отправления:</label>
+    <input type="datetime-local" name="form-__prefix__-departure_datetime" id="id_form-__prefix__-departure_datetime">
+
+    <label for="id_form-__prefix__-arrival_datetime">Время прибытия:</label>
+    <input type="datetime-local" name="form-__prefix__-arrival_datetime" id="id_form-__prefix__-arrival_datetime">
+
+    <label for="id_form-__prefix__-price_travel">Цена:</label>
+    <input type="number" name="form-__prefix__-price_travel" id="id_form-__prefix__-price_travel" step="0.01">
+
+    <input type="hidden" name="form-__prefix__-order" value="__ORDER__">
+  `;
+
+  $('#add-form').click(function () {
+    let newFormHtml = emptyFormTemplate.replace(/__prefix__/g, formIndex).replace(/__ORDER__/g, formIndex + 1);
+
+    // Получаем значение предыдущего to_city
+    const prevToCity = $(`#id_form-${formIndex - 1}-to_city`).val();
+    const prevToCityText = $(`#id_form-${formIndex - 1}-to_city option:selected`).text();
+
+    // Добавляем скрытое поле для from_city
+    const hiddenFromCity = `
+      <label>Место отправления:</label>
+      <input type="hidden" name="form-${formIndex}-from_city" value="${prevToCity}">
+      <input type="text" value="${prevToCityText}" readonly class="readonly-from-city">
+    `;
+
+    // Вставляем его в начало формы
+    newFormHtml = hiddenFromCity + newFormHtml;
+
+    // Добавляем новую форму в контейнер
+    $('#form-container').append('<div class="form-block">' + newFormHtml + '</div>');
+
+    // Увеличиваем счётчик
+    totalForms.val(formIndex + 1);
+    formIndex++;
+  });
+</script>
+
+{% endblock content %}

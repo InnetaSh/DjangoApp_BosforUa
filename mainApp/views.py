@@ -1,10 +1,14 @@
 
 from django.shortcuts import render, redirect
-from .models import City, Ticket
-from .forms import TicketForm
+from .models import City, Ticket, Trip, Route, TripRoute
+from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
 
-def home2(request):
-    return render(request, 'mainApp/base.html')
+
+from .context_data import (
+    features, about, routes_blocks,
+    footer_blocks, footer_blocks_img
+)
+
 
 
 
@@ -18,287 +22,9 @@ def home(request):
             return redirect('ticket_list')
     else:
         form = TicketForm()
-        features = [
-            {
-                'icon': 'img/clock.svg',
-                'title': 'Без кас та черг',
-                'subtitle': 'Квитки онлайн у будь-який час на сайті та в додатку',
-            },
-            {
-                'icon': 'img/road.svg',
-                'title': '50 000 напрямків',
-                'subtitle': 'Рейтинг рейсів перевізників за відгуками пасажирів',
-            },
-            {
-                'icon': 'img/card.svg',
-                'title': 'Безпечна оплата',
-                'subtitle': 'Стандарти безпеки PCI DSS для захисту платіжних даних',
-            },
-            {
-                'icon': 'img/return_ticket.svg',
-                'title': 'Повернення квитків',
-                'subtitle': 'Швидке повернення в особистому кабінеті',
-            },
-        ]
-        about = [
-            {
-                'title': 'Купити квиток на автобус онлайн просто',
-                'description': '''
-                    Коли потрібно відправитися в інше місто на автобусі, найменше хочеться їхати на галасливий автовокзал, щоб там купити квитки на автобус. Онлайн через Інтернет це зробити значно легше. Окрім того, при замовленні на вокзалі транспортний засіб, на якому вам доведеться їхати, напевно стане для вас несподіванкою – у вас навряд чи буде час вибрати його модель перед вікном каси.
-
-                    <br><br>Busfor.ua</b> – це зручна система безкоштовного бронювання і простого викупу квитків. Після бронювання, ви зможете придбати білети на автобус будь-яким зручним способом.
-                    
-                   <br><br>Здійснюючи бронювання квитків на автобус онлайн, ви резервуєте місце в автобусі нашого партнера-перевізника, який моментально закріплює його за вами. Після оплати замовлення, ви можете з упевненістю відправлятися на посадку. При посадці вам лише потрібно показати водієві роздрукований квиток на підтвердження, що саме ви замовили місце. Щоб роздрукувати квиток, знадобиться звичайний принтер.
-                    
-                    <br><br>Замовляйте автобусні квитки онлайн – це комфортно і надійно.
-                '''.strip()
-            },
-            {
-                'title': 'Квитки на автобус бронюються безкоштовно',
-                'description': '''
-                За допомогою нашої системи пошуку рейсів ви зможете вибрати потрібний напрямок, маршрут і навіть підібрати певний автобус. Квитки на потрібну дату ви без зусиль знайдете за допомогою поля пошуку на сайті Busfor.ua.
-                
-                <br><br>Наша система дає змогу безкоштовно забронювати білети на автобус онлайн, а потім викупити їх найбільш зручним способом.
-                
-                <br><br>Перш, ніж купити білет на автобус, радимо ознайомитися з усіма пропозиціями від перевізників. Тут завжди можна вибрати оптимальний для себе варіант за ціною і умовами поїздки: від економ-класу до автобусів з VIP обслуговуванням за розумну ціну.
-                
-                <br><br>Замовлення квитків на автобус забере у вас буквально 2 хвилини. В результаті ви отримаєте SMS з номером бронювання на свій мобільний телефон. За допомогою цього номера, ви зможете викупити квиток протягом зазначеного терміну в розділі "Мої квитки" на сайті або в Центрі обслуговування клієнтів.
-                '''.strip()
-            },
-            {
-                'title': 'Квитки на автобус легко повернути',
-                'description': '''
-                На сайті BUSFOR не тільки просто купити білет на автобус онлайн, але і просто його повернути. Повернення квитка здійснюється згідно з державною постановою КМУ «Правила надання послуг пасажирського автомобільного транспорту», а також згідно з умовами кожного перевізника.
-        
-                <br><br>Повернути невикористані автобусні квитки ви можете через Центр обслуговування клієнтів.
-                <br><br>Кошти за невикористаний квиток будуть зараховані протягом 30 днів.
-                
-                <br><br>Умови повернення коштів у кожного перевізника різняться, тому варто уточнювати цю інформацію.
-                
-                <br><br>Дізнатися докладніше про умови повернення можна в Центрі обслуговування клієнтів, там же можна і купити квиток на автобус
-                '''.strip()
-            }
-        ]
-        countries = [
-            {
-                'title': 'Польща',
-            },
-            {
-                'title': 'Німеччина',
-            },
-            {
-                'title': 'Чехія',
-            },
-            {
-                'title': 'Литва',
-            },
-            {
-                'title': 'Латвія',
-            },
-            {
-                'title': 'Естонія',
-            },
-
-        ]
-        schedule= [
-            {
-                'title': 'Київ',
-            },
-            {
-                'title': 'Дніпро',
-            },
-            {
-                'title': 'Львів',
-            },
-            {
-                'title': 'Харків',
-            },
-            {
-                'title': 'Одеса',
-            },
-            {
-                'title': 'Запоріжжя',
-            },
-            {
-                'title': 'Миколаїв',
-            },
-        ]
-        international= [
-            {
-                'from_city': 'Київ',
-                'to_city': 'Варшава',
-            },
-            {
-                'from_city': 'Львів',
-                'to_city': 'Варшава',
-            },
-            {
-                'from_city': 'Варшава',
-                'to_city': 'Київ',
-            },
-            {
-                'from_city': 'Варшава',
-                'to_city': 'Львів',
-            },
-            {
-                'from_city': 'Львів',
-                'to_city': 'Краків',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Краків',
-            },
-            {
-                'from_city': 'Львів',
-                'to_city': 'Прага',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Прага',
-            },
-        ]
-        internal=[
-            {
-                'from_city': 'Київ',
-                'to_city': 'Одеса',
-            },
-            {
-                'from_city': 'Одеса',
-                'to_city': 'Київ',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Львів',
-            },
-            {
-                'from_city': 'Львів',
-                'to_city': 'Київ',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Харків',
-            },
-            {
-                'from_city': 'Харків',
-                'to_city': 'Київ',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Дніпро',
-            },
-            {
-                'from_city': 'Дніпро',
-                'to_city': 'Київ',
-            },
-            {
-                'from_city': 'Київ',
-                'to_city': 'Запоріжжя',
-            },
-        ]
-
-    info = [
-        {
-            'title': 'Про нас',
-        },
-        {
-            'title': 'Питання та відповіді',
-        },
-        {
-            'title': 'Повернути квитки',
-        },
-        {
-            'title': 'Блог',
-        },
-        {
-            'title': 'Контакти',
-        },
-    ]
-    partners = [
-        {
-            'title': 'Перевізникам',
-        },
-        {
-            'title': 'Агентам',
-        },
-        {
-            'title': 'Партнерська програма',
-        },
-        {
-            'title': 'Автобусні перевізники',
-        },
-    ]
-    document = [
-        {
-            'title': 'Договір оферти',
-        },
-        {
-            'title': 'Політика конфіденційності',
-        },
-    ]
-    mobileApp = [
-        {
-            'icon': 'img/download-onAppStore-logo.png',
-        },
-        {
-            'icon': 'img/download-onGooglePlay-logo.png',
-        },
-    ]
-    socialMediaApp = [
-        {
-            'icon': 'img/SocialMediaApps-logo.png',
-        },
-    ]
 
 
-    routes_blocks = [
-        {
-            'type': 'list',
-            'items': countries
-        },
-        {
-            'type': 'list',
-            'items': schedule
-        },
-        {
-            'type': 'pair',
-            'items': international
-        },
-        {
-            'type': 'pair',
-            'items': internal
-        },
-    ]
-    footer_blocks = [
-        {
-            'type': 'list',
-            'title':'Інформація',
-            'items': info
-        },
-        {
-            'type': 'list',
-            'title': 'Партнерам',
-            'items': partners
-        },
-        {
-            'type': 'list',
-            'title': 'Документи',
-            'items': document
-        },
-    ]
-    footer_blocks_img = [
-        {
-            'type': 'img',
-            'title': 'Мобільний додаток',
-            'items': mobileApp
-        },
-        {
-            'type': 'img',
-            'title': 'Ми в соцмережах',
-            'items': socialMediaApp
-        },
-    ]
-
-    return render(request, 'mainApp/base.html', {
+    return render(request, 'mainApp/home.html', {
         'form': form,
         'features': features,
         'about': about,
@@ -306,3 +32,46 @@ def home(request):
         'footer_blocks': footer_blocks,
         'footer_blocks_img':footer_blocks_img
     })
+
+
+def create_trip_view(request):
+    if request.method == 'POST':
+        trip_form = TripForm(request.POST)
+        formset = TripRouteWithRouteFormSet(request.POST)
+
+        if trip_form.is_valid() and formset.is_valid():
+            trip = trip_form.save()
+
+            for form in formset:
+                if not form.cleaned_data:
+                    continue
+                data = form.cleaned_data
+                route = Route.objects.create(
+                    from_city=data['from_city'],
+                    to_city=data['to_city'],
+                    departure_datetime=data['departure_datetime'],
+                    arrival_datetime=data['arrival_datetime'],
+                    price_travel=data['price_travel'],
+                )
+                TripRoute.objects.create(
+                    trip=trip,
+                    route=route,
+                    order=data['order'],
+                )
+
+            return redirect('success_url')
+
+    else:
+        trip_form = TripForm()
+        formset = TripRouteWithRouteFormSet()
+
+    return render(request, 'mainApp/add_trip.html', {
+        'trip_form': trip_form,
+        'formset': formset,
+        'features': features,
+        'about': about,
+        'routes_blocks': routes_blocks,
+        'footer_blocks': footer_blocks,
+        'footer_blocks_img': footer_blocks_img
+    })
+

@@ -1,0 +1,93 @@
+{% extends "mainApp/base.html" %}
+{% load static %}
+{% block content %}
+ <div class="main-wrapper  bg-primary">
+      <div class=" form-section">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-fields">
+            {% for field in form %}
+            <div class="form-row{% if forloop.first %} first{% endif %}">
+              {{ field.label_tag }}
+              {{ field }}
+              {{ field.errors }}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="form-submit">
+            <div class="form-button-row">
+              <button type="submit" class="btn btn-primary">🔍 Знайти квитки</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="main-wrapper  showBlock">
+      <div class="form-fixed-top">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-fields">
+            {% for field in form %}
+            <div class="form-row{% if forloop.first %} first{% endif %}">
+              {{ field.label_tag }}
+              {{ field }}
+              {{ field.errors }}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="form-submit">
+            <div class="form-submit">
+              <button type="submit" class="btn  btn-primar">🔍 Знайти квитки</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="redirection-section">
+        <span class="section-title">Квитки на автобус</span>
+        <span class="section-subtitle">по Україні, Польщі та Європі</span>
+      </div>
+
+      <div class="features-grid">
+        {% for item in features %}
+        <div class="feature-item">
+          <img src="{% static item.icon %}" alt="Icon" class="logo-small" />
+          <div>
+            <span class="title-base feature-item-title">{{ item.title }}</span>
+            <div class="subtitle-base feature-item-subtitle">{{ item.subtitle }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="about-section">
+        <div class="title-base section-title">Чому обирають Busfor</div>
+        <div class="about-feature">
+          {% for item in about %}
+          <div class="about-feature-item">
+            <span class="title-base about-feature-title">{{ item.title }}</span>
+            <span class="subtitle-base  about-feature-description">
+              <p>{{ item.description|safe }}</p>
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="routes-list">
+        {% for block in routes_blocks %}
+        <div class="routes-column">
+          {% for item in block.items %}
+          {% if block.type == 'list' %}
+          <a class="title-base route-title">{{ item.title }}</a>
+          {% elif block.type == 'pair' %}
+          <a class="title-base route-title">{{ item.from_city }} &rarr; {{ item.to_city }}</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+{% endblock content %}
