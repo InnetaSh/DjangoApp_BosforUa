@@ -37,6 +37,13 @@ class Route(models.Model):
 
 class Trip(models.Model):
     number_trip = models.PositiveIntegerField(verbose_name="Номер рейсу")
+    carrier = models.CharField("Перевізник", max_length=250, default="Неизвестно")
+    bus_description = models.CharField(
+        max_length=255,
+        default="Без опису",
+        verbose_name="Опис автобуса"
+    )
+    count_passengers = models.PositiveIntegerField("Кількість місць", default=10)
 
     def __str__(self):
         return f"Рейс №{self.number_trip}"

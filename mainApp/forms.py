@@ -12,18 +12,16 @@ class TicketForm(forms.ModelForm):
         }
 
 
-
-
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
-        fields = ['number_trip']
+        fields = ['number_trip', 'carrier', 'bus_description', 'count_passengers']
+
 
 class RouteForm(forms.ModelForm):
     class Meta:
         model = Route
         fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel']
-
 
 
 class TripRouteWithRouteForm(forms.Form):
