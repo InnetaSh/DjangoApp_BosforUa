@@ -1,0 +1,27 @@
+{% extends "mainApp/base.html" %}
+{% load static %}
+{% block content %}
+
+<h2>Найденные рейсы:</h2>
+<ul>
+  {% for trip in trips %}
+    <li>
+      Рейс №{{ trip.number_trip }} — свободных мест: {{ trip.free_count_passengers }}
+
+      <div class="detail-trip">
+        <p><b>Марка автобуса: </b>{{ trip.carrier }}</p>
+        <p><b>Загальна кількість місць: </b>{{ trip.count_passengers }}</p>
+        <p><b>Вільні місця: </b>{{ trip.free_count_passengers }}</p>
+        <p><b>Перевізник: </b>{{ trip.bus_description }}</p>
+      </div>
+    </li>
+  {% empty %}
+    <li>Рейсов не найдено.</li>
+  {% endfor %}
+</ul>
+ <a href="{% url 'home' %}">Назад</a>
+
+
+
+
+{% endblock content %}

@@ -25,7 +25,7 @@
 
     <div class="main-wrapper  showBlock">
       <div class="form-fixed-top">
-        <form method="post">
+        <form method="get" action="{% url 'search_tickets' %}">
           {% csrf_token %}
           <div class="form-fields">
             {% for field in form %}

@@ -44,6 +44,7 @@ class Trip(models.Model):
         verbose_name="Опис автобуса"
     )
     count_passengers = models.PositiveIntegerField("Кількість місць", default=10)
+    free_count_passengers = models.PositiveIntegerField("Вільні місця", default=10)
 
     def __str__(self):
         return f"Рейс №{self.number_trip}"

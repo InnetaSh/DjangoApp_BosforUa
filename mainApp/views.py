@@ -1,5 +1,8 @@
+from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from .models import City, Ticket, Trip, Route, TripRoute
 from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
 
@@ -16,13 +19,17 @@ def home(request):
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
-            ticket = form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            return redirect('ticket_list')
+            query_string = urlencode({
+                'from_city': form.cleaned_data['from_city'].id,
+                'to_city': form.cleaned_data['to_city'].id,
+                'date_travel': form.cleaned_data['date_travel'].isoformat(),
+                'count_passenger': form.cleaned_data['count_passenger']
+            })
+
+            search_url = f"{reverse('search_tickets')}?{query_string}"
+            return redirect(search_url)
     else:
         form = TicketForm()
-
 
     return render(request, 'mainApp/home.html', {
         'form': form,
@@ -30,9 +37,51 @@ def home(request):
         'about': about,
         'routes_blocks': routes_blocks,
         'footer_blocks': footer_blocks,
-        'footer_blocks_img':footer_blocks_img
+        'footer_blocks_img': footer_blocks_img
     })
 
+
+def search_tickets(request):
+    form = TicketForm(request.GET or None)
+    found_trips = []
+
+    if form.is_valid():
+        from_city = form.cleaned_data['from_city']
+        to_city = form.cleaned_data['to_city']
+        date_travel = form.cleaned_data['date_travel']
+        count_passenger = form.cleaned_data['count_passenger']
+
+        all_trips = Trip.objects.filter(free_count_passengers__gte=count_passenger)
+
+        for trip in all_trips:
+            routes = list(trip.trip_routes.select_related('route').order_by('order'))
+
+            from_index, to_index = None, None
+            for i, tr in enumerate(routes):
+                for i, tr in enumerate(routes):
+                    print(f"Checking route {i}: order={tr.order} from {tr.route.from_city} to {tr.route.to_city}")
+
+                    if from_index is None:
+                        if tr.route.from_city == from_city and tr.route.departure_datetime.date() == date_travel:
+                            from_index = i
+                            print(f"Found from_index at index {i}, order {tr.order}")
+                    else:
+                        if tr.route.to_city == to_city and tr.order >= routes[from_index].order:
+                            to_index = i
+                            print(f"Found to_index at index {i}, order {tr.order}")
+                            break
+
+            if from_index is not None and to_index is not None and from_index <= to_index:
+                found_trips.append(trip)
+    return render(request, 'mainApp/search_tickets.html', {
+        'form': form,
+        'trips': found_trips,
+        'features': features,
+        'about': about,
+        'routes_blocks': routes_blocks,
+        'footer_blocks': footer_blocks,
+        'footer_blocks_img': footer_blocks_img
+    })
 
 def create_trip_view(request):
     if request.method == 'POST':
