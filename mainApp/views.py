@@ -35,31 +35,54 @@ def home(request):
 
 
 def create_trip_view(request):
+    print("➡ POST данные:")
+    for key, value in request.POST.items():
+        print(f"{key}: {value}")
+
     if request.method == 'POST':
         trip_form = TripForm(request.POST)
         formset = TripRouteWithRouteFormSet(request.POST)
 
+
+        print("➡ POST данные:")
+        for key, value in request.POST.items():
+            print(f"{key}: {value}")
+
         if trip_form.is_valid() and formset.is_valid():
             trip = trip_form.save()
 
-            for form in formset:
-                if not form.cleaned_data:
+            for i, form in enumerate(formset):
+                if not form.has_changed():
+                    continue  # форма пустая, не трогаем
+
+                if not form.is_valid():
+                    print(f"Форма #{i} невалидна: {form.errors}")
                     continue
-                data = form.cleaned_data
+
+                # тут уже можно использовать cleaned_data
                 route = Route.objects.create(
-                    from_city=data['from_city'],
-                    to_city=data['to_city'],
-                    departure_datetime=data['departure_datetime'],
-                    arrival_datetime=data['arrival_datetime'],
-                    price_travel=data['price_travel'],
+                    from_city=form.cleaned_data['from_city'],
+                    to_city=form.cleaned_data['to_city'],
+                    departure_datetime=form.cleaned_data['departure_datetime'],
+                    arrival_datetime=form.cleaned_data['arrival_datetime'],
+                    price_travel=form.cleaned_data['price_travel'],
                 )
+
                 TripRoute.objects.create(
                     trip=trip,
                     route=route,
-                    order=data['order'],
+                    order=form.cleaned_data['order']
                 )
 
             return redirect('success_url')
+
+        else:
+            print("❌ Ошибки в TripForm:", trip_form.errors.as_data())
+            print("❌ Ошибки в Formset:")
+
+            for i, form in enumerate(formset):
+                print(f"Форма #{i}:")
+                print(form.errors.as_data())
 
     else:
         trip_form = TripForm()
@@ -74,4 +97,3 @@ def create_trip_view(request):
         'footer_blocks': footer_blocks,
         'footer_blocks_img': footer_blocks_img
     })
-

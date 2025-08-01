@@ -90,4 +90,24 @@
       </div>
     </div>
 
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const formWrapperTop = document.querySelector('.form-fixed-top');
+      const wrapper = document.querySelector('.showBlock');
+
+      function checkPosition() {
+        const rect = wrapper.getBoundingClientRect();
+
+        if (rect.top <= 0) {
+          formWrapperTop.classList.add('visible');
+        } else {
+          formWrapperTop.classList.remove('visible');
+        }
+      }
+
+      window.addEventListener('scroll', checkPosition);
+      window.addEventListener('resize', checkPosition);
+    });
+  </script>
 {% endblock content %}

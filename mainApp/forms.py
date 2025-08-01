@@ -24,12 +24,16 @@ class RouteForm(forms.ModelForm):
         model = Route
         fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel']
 
-class TripRouteWithRouteForm(forms.Form):
-    from_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Место отправления")
-    to_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Место прибытия")
-    departure_datetime = forms.DateTimeField(label="Время отправления")
-    arrival_datetime = forms.DateTimeField(label="Время прибытия")
-    price_travel = forms.DecimalField(max_digits=10, decimal_places=2, label="Цена")
-    order = forms.IntegerField(label="Порядок")
+
+
+class TripRouteWithRouteForm(forms.ModelForm):
+    order = forms.IntegerField(widget=forms.HiddenInput())
+    class Meta:
+        model = Route
+        fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel']
+        widgets = {
+            'departure_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'arrival_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
 
 TripRouteWithRouteFormSet = formset_factory(TripRouteWithRouteForm, extra=1, can_delete=True)
