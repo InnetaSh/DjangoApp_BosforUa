@@ -94,7 +94,11 @@
               <h3>{{ block.title }}</h3>
 
               {% for item in block.items %}
-              <a>{{ item.title }}</a>
+              {% if item.title == 'Перевізникам' %}
+                <a href="{% url 'create_trip_view' %}">{{ item.title }}</a>
+              {% else %}
+                <a>{{ item.title }}</a>
+              {% endif%}
               {% endfor %}
 
             </div>

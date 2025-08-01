@@ -432,6 +432,10 @@ body{
       flex: 1;
 }
 
+.dotua-container-col a{
+    text-decoration:none; !important;
+}
+
 @media (max-width: 1200px) {
     .dotua-container-col-img{
         display:flex;
@@ -533,7 +537,7 @@ body{
 
 
 /* =============================
-    FORM SECTION
+    FORM SECTION-ADD-TRIP
    ============================= */
 .form-section-add-trip{
   padding:  10px 0;

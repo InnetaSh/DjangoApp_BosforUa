@@ -12,13 +12,12 @@
       {% for form in formset %}
         <div class="form-fields-add-trip">
             {% for field in form %}
-
+            <input type="hidden" name="form-{{ forloop.counter0 }}-order" value="{{ forloop.counter }}">
+                {% if field.name != 'order'%}
                  <div class="form-row-add-trip">
-
                       {{ field.label_tag }} {{ field }}
-
-
                  </div>
+                  {% endif %}
             {% endfor %}
         </div>
       {% endfor %}
@@ -32,73 +31,73 @@
   </form>
 
 
-<!--  <template id="to-city-template">-->
-<!--  {{ formset.empty_form.to_city }}-->
-<!--</template>-->
-<!-- </div>-->
-<!-- <script>-->
-<!--  document.addEventListener('DOMContentLoaded', function () {-->
-<!--    const totalForms = document.getElementById('id_form-TOTAL_FORMS');-->
-<!--    const toCityTemplate = document.getElementById('to-city-template').innerHTML;-->
-<!--    let formIndex = parseInt(totalForms.value);-->
+  <template id="to-city-template">
+  {{ formset.empty_form.to_city }}
+</template>
+ </div>
+ <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+    const toCityTemplate = document.getElementById('to-city-template').innerHTML;
+    let formIndex = parseInt(totalForms.value);
 
-<!--    const addFormBtn = document.getElementById('add-form');-->
-<!--    const formContainer = document.getElementById('form-container');-->
+    const addFormBtn = document.getElementById('add-form');
+    const formContainer = document.getElementById('form-container');
 
-<!--    const emptyFormTemplate = `-->
-<!--     <div class="form-row-add-trip">-->
-<!--        <label>Место отправления:</label>-->
-<!--        <input type="hidden" name="form-__prefix__-from_city" value="__FROM_CITY__">-->
-<!--        <input type="text" value="__FROM_CITY_TEXT__" readonly class="readonly-from-city">-->
-<!--      </div>-->
-<!--      <div class="form-row-add-trip">-->
-<!--        <label for="id_form-__prefix__-to_city">Место прибытия:</label>-->
-<!--         __TO_CITY_SELECT__-->
-<!--      </div>-->
-<!--      <div class="form-row-add-trip">-->
-<!--        <label for="id_form-__prefix__-departure_datetime">Время отправления:</label>-->
-<!--        <input type="datetime-local" name="form-__prefix__-departure_datetime" id="id_form-__prefix__-departure_datetime">-->
-<!--      </div>-->
-<!--      <div class="form-row-add-trip">-->
-<!--        <label for="id_form-__prefix__-arrival_datetime">Время прибытия:</label>-->
-<!--        <input type="datetime-local" name="form-__prefix__-arrival_datetime" id="id_form-__prefix__-arrival_datetime">-->
-<!--      </div>-->
-<!--      <div class="form-row-add-trip">-->
-<!--        <label for="id_form-__prefix__-price_travel">Цена:</label>-->
-<!--        <input type="number" name="form-__prefix__-price_travel" id="id_form-__prefix__-price_travel" step="0.01">-->
-<!--      </div>-->
-<!--      <input type="hidden" name="form-__prefix__-order" value="__ORDER__">-->
+    const emptyFormTemplate = `
+     <div class="form-row-add-trip">
+        <label>Место отправления:</label>
+        <input type="hidden" name="form-__prefix__-from_city" value="__FROM_CITY__">
+        <input type="text" value="__FROM_CITY_TEXT__" readonly class="readonly-from-city">
+      </div>
+      <div class="form-row-add-trip">
+        <label for="id_form-__prefix__-to_city">Место прибытия:</label>
+         __TO_CITY_SELECT__
+      </div>
+      <div class="form-row-add-trip">
+        <label for="id_form-__prefix__-departure_datetime">Время отправления:</label>
+        <input type="datetime-local" name="form-__prefix__-departure_datetime" id="id_form-__prefix__-departure_datetime">
+      </div>
+      <div class="form-row-add-trip">
+        <label for="id_form-__prefix__-arrival_datetime">Время прибытия:</label>
+        <input type="datetime-local" name="form-__prefix__-arrival_datetime" id="id_form-__prefix__-arrival_datetime">
+      </div>
+      <div class="form-row-add-trip">
+        <label for="id_form-__prefix__-price_travel">Цена:</label>
+        <input type="number" name="form-__prefix__-price_travel" id="id_form-__prefix__-price_travel" step="0.01">
+      </div>
+      <input type="hidden" name="form-__prefix__-order" value="__ORDER__">
 
-<!--    `;-->
+    `;
 
-<!--    addFormBtn.addEventListener('click', function () {-->
-<!--      const prevToCitySelect = document.getElementById(`id_form-${formIndex - 1}-to_city`);-->
-<!--      const prevToCity = prevToCitySelect?.value || '';-->
-<!--      const prevToCityText = prevToCitySelect?.selectedOptions[0]?.text || '';-->
+    addFormBtn.addEventListener('click', function () {
+      const prevToCitySelect = document.getElementById(`id_form-${formIndex - 1}-to_city`);
+      const prevToCity = prevToCitySelect?.value || '';
+      const prevToCityText = prevToCitySelect?.selectedOptions[0]?.text || '';
 
-<!--      let toCityHtml = toCityTemplate-->
-<!--        .replace(/__prefix__/g, formIndex)-->
-<!--        .replace(/id="id_to_city"/g, `id="id_form-${formIndex}-to_city"`)-->
-<!--        .replace(/name="to_city"/g, `name="form-${formIndex}-to_city"`);-->
+      let toCityHtml = toCityTemplate
+        .replace(/__prefix__/g, formIndex)
+        .replace(/id="id_to_city"/g, `id="id_form-${formIndex}-to_city"`)
+        .replace(/name="to_city"/g, `name="form-${formIndex}-to_city"`);
 
 
-<!--      let newFormHtml = emptyFormTemplate-->
-<!--        .replace(/__prefix__/g, formIndex)-->
-<!--        .replace(/__ORDER__/g, formIndex + 1)-->
-<!--        .replace(/__FROM_CITY__/g, prevToCity)-->
-<!--        .replace(/__FROM_CITY_TEXT__/g, prevToCityText)-->
-<!--         .replace('__TO_CITY_SELECT__', toCityHtml);;-->
+      let newFormHtml = emptyFormTemplate
+        .replace(/__prefix__/g, formIndex)
+        .replace(/__ORDER__/g, formIndex + 1)
+        .replace(/__FROM_CITY__/g, prevToCity)
+        .replace(/__FROM_CITY_TEXT__/g, prevToCityText)
+         .replace('__TO_CITY_SELECT__', toCityHtml);;
 
-<!--      const formBlock = document.createElement('div');-->
-<!--      formBlock.className = 'form-fields-add-trip';-->
-<!--      formBlock.innerHTML = newFormHtml;-->
-<!--      formContainer.appendChild(formBlock);-->
+      const formBlock = document.createElement('div');
+      formBlock.className = 'form-fields-add-trip';
+      formBlock.innerHTML = newFormHtml;
+      formContainer.appendChild(formBlock);
 
-<!--      totalForms.value = formIndex + 1;-->
-<!--      formIndex++;-->
-<!--    });-->
-<!--  });-->
-<!--</script>-->
+      totalForms.value = formIndex + 1;
+      formIndex++;
+    });
+  });
+</script>
 
 
 {% endblock content %}

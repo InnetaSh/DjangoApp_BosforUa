@@ -35,14 +35,9 @@ def home(request):
 
 
 def create_trip_view(request):
-    print("➡ POST данные:")
-    for key, value in request.POST.items():
-        print(f"{key}: {value}")
-
     if request.method == 'POST':
         trip_form = TripForm(request.POST)
         formset = TripRouteWithRouteFormSet(request.POST)
-
 
         print("➡ POST данные:")
         for key, value in request.POST.items():
@@ -53,13 +48,12 @@ def create_trip_view(request):
 
             for i, form in enumerate(formset):
                 if not form.has_changed():
-                    continue  # форма пустая, не трогаем
+                    continue
 
                 if not form.is_valid():
                     print(f"Форма #{i} невалидна: {form.errors}")
                     continue
 
-                # тут уже можно использовать cleaned_data
                 route = Route.objects.create(
                     from_city=form.cleaned_data['from_city'],
                     to_city=form.cleaned_data['to_city'],
@@ -74,7 +68,7 @@ def create_trip_view(request):
                     order=form.cleaned_data['order']
                 )
 
-            return redirect('success_url')
+            return redirect('home')
 
         else:
             print("❌ Ошибки в TripForm:", trip_form.errors.as_data())
