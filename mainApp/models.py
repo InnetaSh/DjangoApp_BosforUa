@@ -26,6 +26,9 @@ class Route(models.Model):
     departure_datetime = models.DateTimeField(verbose_name="Дата та час відправлення")
     arrival_datetime = models.DateTimeField(verbose_name="Дата та час прибуття")
     price_travel = models.DecimalField(verbose_name="Ціна поїздки", max_digits=10, decimal_places=2)
+    from_place = models.CharField("Місце відправлення", max_length=250, default="Неизвестно")
+    to_place = models.CharField("Місце прибуття", max_length=250, default="Неизвестно")
+
 
     def __str__(self):
         return (

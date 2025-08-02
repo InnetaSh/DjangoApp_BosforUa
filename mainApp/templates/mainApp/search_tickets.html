@@ -1,26 +1,80 @@
 {% extends "mainApp/base.html" %}
 {% load static %}
 {% block content %}
+<div class="main-wrapper search-tickets-section " xmlns="http://www.w3.org/1999/html">
+  <div class="title-base search-tickets-subtitle">Квитки на автобус</div>
+  <div class="title-base search-tickets-title">{{ from_city}} -> {{to_city}}</div>
+  <div class="search-tickets-info-container">
+     <div class="title-base">Виїзд та прибуття за місцевим часом</div>
+     <div class="title-base search-tickets-infotitle">
+       Розклад автобусів {{ from_city}} — {{to_city}} на {{ date_travel|date:"j E Y" }}
+     </div>
+  </div>
+  <div class="about-trip-container">
+     <div class="title-base">Рейси з позначкою
+        <span class="title-base ticketBadge-title">Без роздруковування</span>
+     </div>
+     <div class="title-base ">
+       Під час посадки покажіть квиток на екрані вашого телефону, роздруковувати необов'язково.
+     </div>
+  </div>
+   {% for trip_data in trips %}
+    {% with trip=trip_data.trip route_list=trip_data.routes %}
+      <div class="detail-trip-container">
 
-<h2>Найденные рейсы:</h2>
-<ul>
-  {% for trip in trips %}
-    <li>
-      Рейс №{{ trip.number_trip }} — свободных мест: {{ trip.free_count_passengers }}
+          <span type="eticket" class="badge-info">
+            Без роздруковування
+          </span>
 
-      <div class="detail-trip">
-        <p><b>Марка автобуса: </b>{{ trip.carrier }}</p>
-        <p><b>Загальна кількість місць: </b>{{ trip.count_passengers }}</p>
-        <p><b>Вільні місця: </b>{{ trip.free_count_passengers }}</p>
-        <p><b>Перевізник: </b>{{ trip.bus_description }}</p>
+        <div  class="detail-trip-item">
+           <div class="detail-trip-subtitle ">
+              {{ trip.carrier }}
+            </div>
+          <div  class="detail-trip-grid ">
+            <div  class="detail-trip-item-col">
+                <div class="flex-start">
+                   <div class="detail-trip-title ">
+                      {% for r in route_list %}
+                     {{  r.route.departure_datetime|date:"H:i" }}
+                      {% endfor %}
+                  </div>
+                     <div class="detail-trip-grey-title ">
+                      {% for r in trip_data.routes %}
+                        {{ r.duration }}
+                      {% endfor %}
+                  </div>
+                </div>
+                <div class="detail-trip-subtitle ">
+                  {% for r in route_list %}
+                 {{  r.route.from_place }}
+                  {% endfor %}
+              </div>
+            </div>
+            <div  class="detail-trip-item-col">
+               <div class="detail-trip-title ">
+                  {% for r in route_list %}
+                 {{  r.route.arrival_datetime|date:"H:i" }}
+                  {% endfor %}
+              </div>
+                 <div class="detail-trip-subtitle ">
+                  {% for r in route_list %}
+                 {{  r.route.to_place }}
+                  {% endfor %}
+              </div>
+            </div>
+
+        </div>
+          <div class=" btn btn-left-price">
+              {% for r in route_list %}
+                  {{  r.route.price_travel }} грн.
+              {% endfor %}
+            </div>
       </div>
-    </li>
-  {% empty %}
-    <li>Рейсов не найдено.</li>
-  {% endfor %}
-</ul>
- <a href="{% url 'home' %}">Назад</a>
 
+     {% endwith %}
+{% endfor %}
+   <a href="{% url 'home' %}"><-Назад до пошуку</a>
+</div>
 
 
 

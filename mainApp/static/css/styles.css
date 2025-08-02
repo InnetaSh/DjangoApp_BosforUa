@@ -16,6 +16,7 @@
   --color-background: #e1e1e1;
   --color-subtext: #7f8c8d;
   --color-blue-heading: #2980b9;
+  --color-orange: rgb(255, 132, 0);
 }
 
 body{
@@ -28,6 +29,12 @@ body{
 * {
     box-sizing: border-box;
     padding:0;
+}
+
+.flex-start{
+    display:flex;
+    justify-content:start;
+     align-items: flex-start;
 }
 
 /* =============================
@@ -418,7 +425,6 @@ body{
 
 .dotua-container-row3 h3 ,
 .dotua-container-row2 h3 {
-     @extend .title-base;
     font-size: 22px;
     margin-top: 40px;
     color: var(--color-text-light);
@@ -536,6 +542,53 @@ body{
 }
 
 
+.search-tickets-title{
+    font-size: 38px;
+    color: var(--color-secondary);
+    font-weight:400;
+    margin-bottom:10px
+}
+.search-tickets-subtitle{
+    font-size: 22px;
+    color: var(--color-secondary);
+    font-weight:500;
+    margin-bottom: -3px;
+}
+.search-tickets-infotitle{
+    font-size: 28px;
+    color: var(--color-secondary);
+    font-weight:400;
+    margin-top: -5px;
+}
+
+.ticketBadge-title{
+   background-color: var(--color-orange);
+   color: var(--color-white);
+   padding:4px;
+   border-radius: 5px;
+   margin-left: 15px;
+}
+
+.detail-trip-title{
+    font-size: 28px;
+    color: var(--color-secondary);
+    font-weight:400;
+    margin-right: 10px;
+}
+.detail-trip-subtitle{
+    font-size: 14px;
+    color: var(--color-secondary);
+    font-weight:300;
+    margin-top:10px;
+    margin-bottom:15px;
+}
+.detail-trip-grey-title {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-text-light);
+}
+
+
 /* =============================
     FORM SECTION-ADD-TRIP
    ============================= */
@@ -546,7 +599,7 @@ body{
   display:flex;
   flex-direction: column;
   justify-content: center;
-  margin-top:20px;
+  margin-top:5px;
 }
 
 
@@ -625,21 +678,80 @@ body{
 
 
 /*=====================================
-
+search-tickets
 =======================================*/
-.detail-trip{
-  width: 100%;
-  height:0;
-  background: white;
-  z-index: 1000;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-   height:70px;
+.search-tickets-section{
+   background-color: var(--color-background);
 }
+.search-tickets-info-container{
+    margin-top: 50px;
+}
+
+.about-trip-container{
+    background-color: var(--color-white);
+    border-radius: 8px;
+    padding:15px;
+}
+
+.detail-trip-container {
+  position: relative;
+  margin-top: 50px;
+}
+
+
+.badge-info {
+  position: absolute;
+  top: -25px;
+  background-color: var(--color-orange);
+  color: white;
+  border-radius: 4px 4px 0 0;
+  padding: 6px 10px 8px 10px;
+  font-size: 13px;
+}
+
+
+.detail-trip-item {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-orange);
+  border-radius: 6px;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  margin-bottom:25px;
+}
+
+.detail-trip-grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+.detail-trip-item-col{
+
+}
+
+.btn-left-price{
+    position: absolute;
+    right:0;
+    bottom: 0;
+    height: 50px;
+    width: 50%;
+    border-radius: 6px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 
 
 

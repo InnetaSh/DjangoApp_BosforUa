@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from .models import City, Ticket, Trip, Route, TripRoute
 from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
-
+from datetime import timedelta
 
 from .context_data import (
     features, about, routes_blocks,
@@ -41,9 +41,18 @@ def home(request):
     })
 
 
+def format_duration(duration):
+    total_minutes = int(duration.total_seconds() // 60)
+    hours = total_minutes // 60
+    minutes = total_minutes % 60
+    return f"{hours} год. {minutes} хв"
+
 def search_tickets(request):
     form = TicketForm(request.GET or None)
     found_trips = []
+    from_city=''
+    to_city = ''
+    date_travel =''
 
     if form.is_valid():
         from_city = form.cleaned_data['from_city']
@@ -71,11 +80,28 @@ def search_tickets(request):
                             print(f"Found to_index at index {i}, order {tr.order}")
                             break
 
+
             if from_index is not None and to_index is not None and from_index <= to_index:
-                found_trips.append(trip)
+                segment_routes = []
+                for r in routes[from_index:to_index + 1]:
+                    if r.route.arrival_datetime >= r.route.departure_datetime:
+                        duration = r.route.arrival_datetime - r.route.departure_datetime
+                    else:
+                        duration = (r.route.arrival_datetime + timedelta(days=1)) - r.route.departure_datetime
+                    segment_routes.append({
+                        'route': r.route,
+                         'duration': format_duration(duration)
+                    })
+                found_trips.append({
+                    'trip': trip,
+                    'routes': segment_routes
+                })
     return render(request, 'mainApp/search_tickets.html', {
         'form': form,
         'trips': found_trips,
+        'to_city':to_city,
+        'from_city':from_city,
+        'date_travel':date_travel,
         'features': features,
         'about': about,
         'routes_blocks': routes_blocks,

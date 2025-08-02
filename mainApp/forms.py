@@ -21,7 +21,7 @@ class TripForm(forms.ModelForm):
 class RouteForm(forms.ModelForm):
     class Meta:
         model = Route
-        fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel']
+        fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel', 'from_place', 'to_place']
 
 
 class TripRouteWithRouteForm(forms.Form):
