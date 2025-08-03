@@ -766,6 +766,17 @@ search-tickets
      position:absolute;
     left:10px;
     top:10px;
+
+}
+.wc-icon {
+  display: inline-block;
+  color: #333;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: sans-serif;
+  vertical-align: middle;
 }
 
 

@@ -49,6 +49,13 @@ class Trip(models.Model):
     count_passengers = models.PositiveIntegerField("Кількість місць", default=10)
     free_count_passengers = models.PositiveIntegerField("Вільні місця", default=10)
 
+    has_air_conditioning = models.BooleanField("Кондиціонер", default=False)
+    has_wifi = models.BooleanField("Wi-Fi", default=False)
+    has_paid_socket = models.BooleanField("Розетка (платно)", default=False)
+    has_free_socket = models.BooleanField("Розетка (безкоштовно)", default=False)
+    has_seat_belts = models.BooleanField("Ремені безпеки", default=False)
+    has_wc = models.BooleanField("WC", default=False)
+
     def __str__(self):
         return f"Рейс №{self.number_trip}"
 

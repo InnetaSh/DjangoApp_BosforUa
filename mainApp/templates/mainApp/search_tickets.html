@@ -126,10 +126,24 @@
                         </div>
                          <div  class="detail-trip-grey-segment ">
                             <div class="trip-icons">
+                                {% if trip.has_air_conditioning %}
                               <i class="fas fa-fan" title="Кондиціонер"></i>
+                                {% endif %}
+                                {% if trip.has_wifi %}
                               <i class="fas fa-wifi" title="Wi-Fi"></i>
+                                 {% endif %}
+                                {% if trip.has_paid_socket %}
                               <i class="fas fa-plug" title="Розетка (платно)"></i>
+                                 {% endif %}
+                                {% if trip.has_free_socket %}
                               <i class="fas fa-plug" title="Розетка (безкоштовно)"></i>
+                                 {% endif %}
+                                {% if trip.has_seat_belts %}
+                              <i class="fas fa-user-shield" title="Ремені безпеки"></i>
+                                 {% endif %}
+                                {% if trip.has_wc %}
+                               <span class="wc-icon" title="Туалет">WC</span>
+                                 {% endif %}
                             </div>
                         </div>
 
