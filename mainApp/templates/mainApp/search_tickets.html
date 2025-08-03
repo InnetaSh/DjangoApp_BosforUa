@@ -112,17 +112,22 @@
                                 </div>
                                 <div class="subtitle-base">грн.</div>
                             </div>
+<div class="flex-column">
                             <div class="btn-left-price">
-                             <span class="btn-price-desktop">
-                                  Обрати
-                             </span>
-                             <span class="btn-price-mobile">
-                                 {% for r in route_list %}
-                                      {{  r.route.price_travel }} грн.
-                                  {% endfor %}
+                                 <span class="btn-price-desktop">
+                                      Обрати
+                                 </span>
+                                 <span class="btn-price-mobile">
+                                     {% for r in route_list %}
+                                          {{  r.route.price_travel }} грн.
+                                      {% endfor %}
 
-                             </span>
-                        </div>
+                                 </span>
+                            </div>
+                             <div class="detail-trip-subtitle red-title">
+                                        {{ trip.free_count_passengers  }} місця
+                            </div>
+    </div>
                         </div>
                          <div  class="detail-trip-grey-segment ">
                             <div class="trip-icons">

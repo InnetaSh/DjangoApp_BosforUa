@@ -41,6 +41,12 @@ body{
     justify-content:center;
      align-items: center-start;
 }
+.flex-column{
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+     align-items: center-start;
+}
 
 /* =============================
     HEADER
@@ -761,6 +767,7 @@ search-tickets
     width:100%;
     height:50px;
     background-color: var(--color-background);
+border-radius: 0 0 6px 6px;
 }
 .trip-icons{
      position:absolute;
@@ -825,7 +832,7 @@ search-tickets
     background-color: var(--color-accent);
     position: relative;
     height: 50px;
-    width: 40%;
+    width: 100%;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -857,8 +864,8 @@ search-tickets
    margin: 0 10px ;
 }
 
-@media (max-width: 1000px) {
- .detail-trip-grid{
+@media (max-width: 1200px) {
+ .detail-trip-wrapper-col-right .detail-trip-grid{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -869,7 +876,7 @@ search-tickets
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 868px) {
     .detail-trip-wrapper{
         display: flex;
         flex-direction: column;
