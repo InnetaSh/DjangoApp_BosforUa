@@ -48,48 +48,96 @@
           </span>
 
         <div  class="detail-trip-item">
-           <div class="detail-trip-subtitle ">
+           <div class="detail-trip-subtitle carrier-mobile">
               {{ trip.carrier }}
             </div>
-          <div  class="detail-trip-grid ">
-            <div  class="detail-trip-item-col">
-                <div class="flex-start">
-                   <div class="detail-trip-title ">
-                      {% for r in route_list %}
-                     {{  r.route.departure_datetime|date:"H:i" }}
-                      {% endfor %}
-                  </div>
-                     <div class="detail-trip-grey-title ">
-                      {% for r in trip_data.routes %}
-                        {{ r.duration }}
-                      {% endfor %}
-                  </div>
-                </div>
-                <div class="detail-trip-subtitle ">
-                  {% for r in route_list %}
-                 {{  r.route.from_place }}
-                  {% endfor %}
-              </div>
-            </div>
-            <div  class="detail-trip-item-col">
-               <div class="detail-trip-title ">
-                  {% for r in route_list %}
-                 {{  r.route.arrival_datetime|date:"H:i" }}
-                  {% endfor %}
-              </div>
-                 <div class="detail-trip-subtitle ">
-                  {% for r in route_list %}
-                 {{  r.route.to_place }}
-                  {% endfor %}
-              </div>
+            <div class="detail-trip-wrapper">
+                 <div class="detail-trip-wrapper-col-left">
+                        <div  class="detail-trip-grid ">
+                            <div  class="detail-trip-item-col">
+                                <div class="flex-start">
+                                   <div class="detail-trip-title ">
+                                      {% for r in route_list %}
+                                     {{  r.route.departure_datetime|date:"H:i" }}
+                                      {% endfor %}
+                                  </div>
+                                     <div class="detail-trip-grey-title ">
+                                      {% for r in trip_data.routes %}
+                                        {{ r.duration }}
+                                      {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="detail-trip-subtitle ">
+                                  {% for r in route_list %}
+                                 {{  r.route.from_place }}
+                                  {% endfor %}
+                              </div>
+                            </div>
+                            <div  class="detail-trip-item-col">
+                           <div class="detail-trip-title ">
+                              {% for r in route_list %}
+                             {{  r.route.arrival_datetime|date:"H:i" }}
+                              {% endfor %}
+                          </div>
+                             <div class="detail-trip-subtitle ">
+                              {% for r in route_list %}
+                             {{  r.route.to_place }}
+                              {% endfor %}
+                          </div>
+                        </div>
+                        </div>
+                        <div  class="detail-trip-grey-segment ">
+                            <div class="detail-trip-subtitle red-title">
+                               <i class="fas fa-chevron-down" style="color: red; margin-right: 5px;"></i>
+                                Детальніше:
+                            </div>
+
+                             <div class="detail-trip-subtitle ">
+                              Перевізник: {{ trip.carrier }}
+                            </div>
+                            <div class="detail-trip-subtitle ">
+                                <i class="fas fa-camera" style="color: red; margin-right: 5px;"></i>
+                              Автобус: {{ trip.bus_description }}
+                            </div>
+                        </div>
+                 </div>
+                 <div class="detail-trip-wrapper-col-right">
+                        <div class="vertical-dashed-line"></div>
+                        <div class="detail-trip-grid ">
+                            <div class="price-desktop">
+                                <div class="detail-trip-title ">
+                                      {% for r in route_list %}
+                                          {{  r.route.price_travel }}
+                                      {% endfor %}
+                                </div>
+                                <div class="subtitle-base">грн.</div>
+                            </div>
+                            <div class="btn-left-price">
+                             <span class="btn-price-desktop">
+                                  Обрати
+                             </span>
+                             <span class="btn-price-mobile">
+                                 {% for r in route_list %}
+                                      {{  r.route.price_travel }} грн.
+                                  {% endfor %}
+
+                             </span>
+                        </div>
+                        </div>
+                         <div  class="detail-trip-grey-segment ">
+                            <div class="trip-icons">
+                              <i class="fas fa-fan" title="Кондиціонер"></i>
+                              <i class="fas fa-wifi" title="Wi-Fi"></i>
+                              <i class="fas fa-plug" title="Розетка (платно)"></i>
+                              <i class="fas fa-plug" title="Розетка (безкоштовно)"></i>
+                            </div>
+                        </div>
+
+                 </div>
             </div>
 
+
         </div>
-          <div class=" btn btn-left-price">
-              {% for r in route_list %}
-                  {{  r.route.price_travel }} грн.
-              {% endfor %}
-            </div>
       </div>
 
      {% endwith %}

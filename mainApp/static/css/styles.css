@@ -36,6 +36,11 @@ body{
     justify-content:start;
      align-items: flex-start;
 }
+.flex{
+    display:flex;
+    justify-content:center;
+     align-items: center-start;
+}
 
 /* =============================
     HEADER
@@ -588,6 +593,10 @@ body{
   color: var(--color-text-light);
 }
 
+.red-title{
+color: var(--color-accent);
+}
+
 
 /* =============================
     FORM SECTION-ADD-TRIP
@@ -717,7 +726,6 @@ search-tickets
   background-color: var(--color-white);
   border: 1px solid var(--color-orange);
   border-radius: 6px;
-  padding: 10px;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -725,31 +733,184 @@ search-tickets
   margin-bottom:25px;
 }
 
+.detail-trip-wrapper{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.detail-trip-wrapper-col-left{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width:70%
+}
+.detail-trip-wrapper-col-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position:relative;
+     width:30%
+}
+.detail-trip-grey-segment{
+    position:relative;
+   display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width:100%;
+    height:50px;
+    background-color: var(--color-background);
+}
+.trip-icons{
+     position:absolute;
+    left:10px;
+    top:10px;
+}
+
+
 .detail-trip-grid {
-  position: relative;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 5px;
-  margin-bottom: 30px;
+      position: relative;
+      width: 100%;
+      height:90%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+      padding: 10px;
+}
+
+.detail-trip-price{
+    position:relative;
+    height: 100%;
+    width: 100%;
+
+
+}
+.vertical-dashed-line {
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:10;
+    display:inline;
+    width: 1px;
+    background: repeating-linear-gradient(
+    to bottom,
+    var(--color-secondary),
+    var(--color-secondary) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  height: 100%;
 }
 
 .detail-trip-item-col{
-
+    width:50%;
 }
 
+
 .btn-left-price{
-    position: absolute;
-    right:0;
-    bottom: 0;
+    background-color: var(--color-accent);
+    position: relative;
     height: 50px;
-    width: 50%;
-    border-radius: 6px 0;
+    width: 40%;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px ;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
+.btn-left-price:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.btn-price-mobile,
+.carrier-mobile{
+    display: none;
+}
+
+.btn-price-desktop,
+.price-desktop{
+   display: flex;
+}
+
+.price-desktop{
+   justify-content: flex-end;
+   align-items: flex-end;
+   margin: 0 10px ;
+}
+
+@media (max-width: 1000px) {
+ .detail-trip-grid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+ }
+ .btn-left-price{
+    width: 60%;
+    }
+}
+
+@media (max-width: 800px) {
+    .detail-trip-wrapper{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-trip-wrapper-col-left{
+         width: 100%;
+    }
+    .detail-trip-grey-segment{
+        display: none;
+        height:0;
+    }
+
+
+    .detail-trip-wrapper-col-right{
+        width:100%;
+        position: absolute;
+        right:0;
+        bottom: 0;
+    }
+
+
+  .btn-left-price{
+        position: absolute;
+        right:0;
+        bottom: 0;
+        height: 50px;
+        width: 50%;
+        border-radius: 6px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-price-mobile,
+     .carrier-mobile{
+        display: inline;
+    }
+    .carrier-mobile{
+       margin-left:20px;;
+    }
+
+    .btn-price-desktop,
+    .price-desktop,
+    .vertical-dashed-line {
+        display: none;
+    }
+
+
+
+}
+
 
 
 
