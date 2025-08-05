@@ -1,0 +1,57 @@
+{% extends "mainApp/base_login.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="login-content-section align-items__center">
+        <div class="login-content">
+            <h2 class="title-base banner-title enter-title">Перевізникам</h2>
+
+            <form method="POST">
+            {% csrf_token %}
+                {% for field in form %}
+
+                 <div class="form-row-login">
+                      {{ field.label_tag }} {{ field }}
+                 </div>
+            {% endfor %}
+            <div class="form-group">
+                <button class="btn btn-login" type="submit">Войти</button>
+            </div>
+        </form>
+         </div>
+        <div class="login-content-info">
+        <p class="title-base feature-item-title ">Запрошуємо автотранспортні підприємтва до співпраці з продажу автобусних квитків на сайті BUSFOR:</p>
+        <div class="title-base section-subtitle">
+                Викупити заброньований квиток
+            </div>
+        <div class="login-content_action">
+            <div class="reg-content_action_item">
+                 <i class="fas fa-check" style="color: red;"></i>
+                Збільшити обсяг продажів
+            </div>
+            <div class="reg-content_action_item">
+                 <i class="fas fa-check" style="color: red;"></i>
+                Зменшити витрати на касове обслуговування
+            </div>
+            <div class="reg-content_action_item">
+                 <i class="fas fa-check" style="color: red;"></i>
+                Вести віддалене адміністрування
+            </div>
+           <div class="reg-content_action_item">
+                 <i class="fas fa-check" style="color: red;"></i>
+                Керувати пасажиропотоком
+            </div>
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Аналізувати і переглядати звітність
+            </div>
+        </div>
+
+    </div>
+
+</div>
+ <div class="border-top pt-3 flex">
+            <h3 class="text-muted">
+                Уже есть аккаунт? <a class="ml-2" href="{% url 'login_carrier' %}">Вход</a>
+            </h3>
+        </div>
+{% endblock content %}

@@ -1,7 +1,27 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .form import UserRegisterForm
+from .form import UserRegisterForm, CarrierRegisterForm
+from django.shortcuts import render, redirect
 
+
+def register_carrier(request):
+    if request.method == 'POST':
+        form = CarrierRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Реєстрація перевізника пройшла успішно!')
+            return redirect('create_trip_view')
+    else:
+        form = CarrierRegisterForm()
+    return render(request, 'users/register_carrier.html', {'form': form})
+
+
+
+@login_required
+def profile_carrier(request):
+
+    return redirect('create_trip_view')
 
 
 
@@ -21,13 +41,6 @@ def register(request):
 
 @login_required
 def profile(request):
-    notices = Notice.objects.all()
-    return render(request, 'main/profile.html', {
-        'notices': notices,
-        'car_brands': CAR_BRANDS,
-        'car_models': CAR_MODELS,
-        'region_choices': [r for r, _ in REGION_CHOICES],
-    })
-from django.shortcuts import render, redirect
 
-# Create your views here.
+    return render(request, 'mainApp/profile.html')
+

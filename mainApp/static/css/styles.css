@@ -1004,6 +1004,7 @@ border-radius: 0 0 6px 6px;
 
 .login-content-info{
  margin-top: 50px;
+  width:50%;
 }
 
 
@@ -1031,8 +1032,11 @@ border-radius: 0 0 6px 6px;
 .login-content_action div{
     font-size: 18px;
     font-weight:400;
-    color: var(--color-text-dark);
-     margin-bottom:5px;;
+     color: var(--color-text-dark);
+     margin-bottom: 10px;
+}
+.reg-content_action_item{
+     margin-bottom: 25px;
 }
 .btn-login{
     width:100%;
