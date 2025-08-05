@@ -56,6 +56,8 @@ class Trip(models.Model):
     has_seat_belts = models.BooleanField("Ремені безпеки", default=False)
     has_wc = models.BooleanField("WC", default=False)
 
+    has_eticket = models.BooleanField("Без роздруковування", default=False)
+
     def __str__(self):
         return f"Рейс №{self.number_trip}"
 

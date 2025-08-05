@@ -42,11 +42,11 @@
    {% for trip_data in trips %}
     {% with trip=trip_data.trip route_list=trip_data.routes %}
       <div class="detail-trip-container">
-
+        {% if trip.has_eticket %}
           <span type="eticket" class="badge-info">
             Без роздруковування
           </span>
-
+        {% endif %}
         <div  class="detail-trip-item">
            <div class="detail-trip-subtitle carrier-mobile">
               {{ trip.carrier }}
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="subtitle-base">грн.</div>
                             </div>
-<div class="flex-column">
+                <div class="flex-column">
                             <div class="btn-left-price">
                                  <span class="btn-price-desktop">
                                       Обрати
@@ -127,7 +127,7 @@
                              <div class="detail-trip-subtitle red-title">
                                         {{ trip.free_count_passengers  }} місця
                             </div>
-    </div>
+                 </div>
                         </div>
                          <div  class="detail-trip-grey-segment ">
                             <div class="trip-icons">

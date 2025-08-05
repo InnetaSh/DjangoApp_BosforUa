@@ -1,21 +1,59 @@
-{% extends "mainApp/base.html" %}
+{% extends "mainApp/base_login.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
+<div class="login-content-section align-items__center">
+        <div class="login-content">
+            <h2 class="title-base section-title enter-title">Увійти або зареєструватися</h2>
+
+            <form method="POST">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Увійти або зареєструватися</legend>
-                {{ form|crispy }}
-            </fieldset>
+                {% for field in form %}
+
+                 <div class="form-row-login">
+                      {{ field.label_tag }} {{ field }}
+                 </div>
+            {% endfor %}
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Регистрация</button>
+                <button class="btn btn-login" type="submit">Войти</button>
             </div>
         </form>
-        <div class="border-top pt-3 flex">
+         </div>
+        <div class="login-content-info">
+        <p class="login-content_subtitle">В особистому кабінеті ви можете:</p>
+        <div class="login-content_action">
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Викупити заброньований квиток
+            </div>
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Переглянути інформацію про рейс
+            </div>
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Завантажити куплений квиток
+            </div>
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Повернути квитки
+            </div>
+            <div>
+                 <i class="fas fa-check" style="color: red;"></i>
+                Залишити відгук про поїздку
+            </div>
+        </div>
+        <p class="section-subtitle title-small" style="margin-top:30px;">Умови
+            <a href="#" target="_blank">публічної оферти</a>
+            та
+            <a href="#" target="_blank">політики конфіденційності</a>
+            .
+        </p>
+    </div>
+
+</div>
+ <div class="border-top pt-3 flex">
             <h3 class="text-muted">
                 Уже есть аккаунт? <a class="ml-2" href="{% url 'login' %}">Вход</a>
             </h3>
         </div>
-    </div>
 {% endblock content %}

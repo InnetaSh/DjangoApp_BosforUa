@@ -982,14 +982,18 @@ border-radius: 0 0 6px 6px;
     display: flex;
     width:100%;
     flex-flow: row-reverse;
-    align-items: flex-start;
     -webkit-box-pack: justify;
     justify-content: space-between;
     background-color: var(--color-white);
     border-radius: 6px;
-   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-   padding:10px 20px;
-
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    padding:10px 20px;
+}
+.align-items__start{
+ align-items: flex-start;
+}
+.align-items__center{
+ align-items: center;
 }
 
 .login-content {
