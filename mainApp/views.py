@@ -1,9 +1,10 @@
 from urllib.parse import urlencode
 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import City, Ticket, Trip, Route, TripRoute
+from .models import City, Ticket, Trip, Route, TripRoute, Station
 from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
 from datetime import timedelta
 
@@ -109,17 +110,28 @@ def search_tickets(request):
         'footer_blocks_img': footer_blocks_img
     })
 
+
+
+def get_stations(request):
+    city_id = request.GET.get('city_id')
+    stations_qs = Station.objects.filter(city_id=city_id)
+    stations = [{"id": s.id, "name": s.name} for s in stations_qs]
+    return JsonResponse({"stations": stations})
+
+def get_city_options():
+    return ''.join([f'<option value="{c.id}">{c.name}</option>' for c in City.objects.all()])
+
+
 def create_trip_view(request):
     if request.method == 'POST':
         trip_form = TripForm(request.POST)
         formset = TripRouteWithRouteFormSet(request.POST)
 
-        print("➡ POST данные:")
-        for key, value in request.POST.items():
-            print(f"{key}: {value}")
 
         if trip_form.is_valid() and formset.is_valid():
-            trip = trip_form.save()
+            trip = trip_form.save(commit=False)
+            trip.carrier = request.user
+            trip.save()
 
             for i, form in enumerate(formset):
                 if not form.has_changed():
@@ -132,9 +144,12 @@ def create_trip_view(request):
                 route = Route.objects.create(
                     from_city=form.cleaned_data['from_city'],
                     to_city=form.cleaned_data['to_city'],
+                    from_place=form.cleaned_data['from_place'],
+                    to_place=form.cleaned_data['to_place'],
                     departure_datetime=form.cleaned_data['departure_datetime'],
                     arrival_datetime=form.cleaned_data['arrival_datetime'],
                     price_travel=form.cleaned_data['price_travel'],
+
                 )
 
                 TripRoute.objects.create(
@@ -156,6 +171,19 @@ def create_trip_view(request):
     else:
         trip_form = TripForm()
         formset = TripRouteWithRouteFormSet()
+
+        for i, form in enumerate(formset.forms):
+            # Например, в поле from_city
+            if 'from_city' in form.fields:
+                current_classes = form.fields['from_city'].widget.attrs.get('class', '')
+                new_classes = f"{current_classes} from-city from-city-{i}".strip()
+                form.fields['from_city'].widget.attrs['class'] = new_classes
+
+            # И в поле to_city
+            if 'to_city' in form.fields:
+                current_classes = form.fields['to_city'].widget.attrs.get('class', '')
+                new_classes = f"{current_classes} to-city to-city-{i}".strip()
+                form.fields['to_city'].widget.attrs['class'] = new_classes
 
     return render(request, 'mainApp/add_trip.html', {
         'trip_form': trip_form,

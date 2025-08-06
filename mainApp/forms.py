@@ -1,6 +1,9 @@
 from django import forms
 from .models import Ticket, Trip, TripRoute, Route, City
 from django.forms import inlineformset_factory, formset_factory
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class TicketForm(forms.ModelForm):
@@ -15,9 +18,9 @@ class TicketForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
+        exclude = ['carrier']
         fields = [
             'number_trip',
-            'carrier',
             'bus_description',
             'count_passengers',
             'free_count_passengers',
@@ -27,17 +30,25 @@ class TripForm(forms.ModelForm):
             'has_free_socket',
             'has_seat_belts',
             'has_wc',
+            'has_eticket',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class RouteForm(forms.ModelForm):
     class Meta:
         model = Route
-        fields = ['from_city', 'to_city', 'departure_datetime', 'arrival_datetime', 'price_travel', 'from_place', 'to_place']
+        fields = ['from_city', 'to_city' , 'from_place', 'to_place', 'departure_datetime', 'arrival_datetime', 'price_travel']
 
 
 class TripRouteWithRouteForm(forms.Form):
     from_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Отправление:")
+    from_place = forms.CharField(max_length=250, label="Місце відправлення")
+
     to_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Прибытие:")
+    to_place = forms.CharField(max_length=250, label="Місце прибуття")
+
     departure_datetime = forms.DateTimeField(
         label="Время отправления",
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})

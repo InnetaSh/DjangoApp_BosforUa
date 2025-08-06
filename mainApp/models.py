@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class City(models.Model):
     name = models.CharField(max_length=100, verbose_name="Місто", unique=True)
@@ -23,16 +24,17 @@ class Ticket(models.Model):
 class Route(models.Model):
     from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_departures', verbose_name="З міста")
     to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_arrivals', verbose_name="У місто")
+    from_place = models.CharField(verbose_name="Місце відправлення", max_length=250, default="Неизвестно")
+    to_place = models.CharField(verbose_name="Місце прибуття", max_length=250, default="Неизвестно")
     departure_datetime = models.DateTimeField(verbose_name="Дата та час відправлення")
     arrival_datetime = models.DateTimeField(verbose_name="Дата та час прибуття")
     price_travel = models.DecimalField(verbose_name="Ціна поїздки", max_digits=10, decimal_places=2)
-    from_place = models.CharField("Місце відправлення", max_length=250, default="Неизвестно")
-    to_place = models.CharField("Місце прибуття", max_length=250, default="Неизвестно")
+
 
 
     def __str__(self):
         return (
-            f"{self.from_city} → {self.to_city} "
+            f"{self.from_city} {self.from_place}→ {self.to_city} {self.to_place}"
             f"({self.departure_datetime:%d.%m %H:%M} - {self.arrival_datetime:%d.%m %H:%M}) "
             f"за ціною {self.price_travel} $"
         )
@@ -40,7 +42,14 @@ class Route(models.Model):
 
 class Trip(models.Model):
     number_trip = models.PositiveIntegerField(verbose_name="Номер рейсу")
-    carrier = models.CharField("Перевізник", max_length=250, default="Неизвестно")
+    carrier = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='trips',
+        verbose_name="Перевізник",
+        limit_choices_to={'isCarrier': True}
+    )
+
     bus_description = models.CharField(
         max_length=255,
         default="Без опису",
@@ -84,4 +93,11 @@ class TripRoute(models.Model):
         return f"{self.trip} – {self.route} (#{self.order})"
 
 
+
+class Station(models.Model):
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='stations')
+    name = models.CharField(max_length=150, verbose_name="Назва зупинки")
+
+    def __str__(self):
+        return f"{self.name} ({self.city.name})"
 
