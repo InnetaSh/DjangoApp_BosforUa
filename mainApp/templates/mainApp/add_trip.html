@@ -65,15 +65,24 @@
       <input type="hidden" name="form-__prefix__-order" value="__ORDER__">
       <div class="form-row-add-trip">
         <label>Місто відправлення:</label>
-        <select name="form-__prefix__-from_city" class="from-city from-city-__prefix__" id="id_form-__prefix__-from_city">
-          __CITY_OPTIONS__
-        </select>
+        <input type="text"
+               name="form-__prefix__-from_city"
+               class="from-city from-city-__prefix__"
+               id="id_form-__prefix__-from_city"
+               placeholder="Введіть місто відправлення"
+               readonly
+               value="__FROM_CITY_TEXT__">
       </div>
       <div class="form-row-add-trip">
         <label>Зупинка відправлення:</label>
-        <select name="form-__prefix__-from_place" class="from-place-select" data-pair="from-city-__prefix__" id="id_form-__prefix__-from_place">
-          <option value="">-- оберіть зупинку --</option>
-        </select>
+        <input type="text"
+               name="form-__prefix__-from_place"
+               class="from-place-select"
+               data-pair="from-city-__prefix__"
+               id="id_form-__prefix__-from_place"
+               placeholder="Введіть зупинку відправлення"
+               readonly
+               value="__FROM_PLACE_TEXT__">
       </div>
 
       <div class="form-row-add-trip">
@@ -84,7 +93,10 @@
       </div>
       <div class="form-row-add-trip">
         <label>Зупинка прибуття:</label>
-        <select name="form-__prefix__-to_place" class="to-place-select" data-pair="to-city-__prefix__"  id="id_form-__prefix__-to_place">
+        <select name="form-__prefix__-to_place"
+                class="to-place-select"
+                data-pair="to-city-__prefix__"
+                id="id_form-__prefix__-to_place">
           <option value="">-- оберіть зупинку --</option>
         </select>
       </div>
