@@ -1,4 +1,4 @@
-<script>
+
   document.addEventListener('DOMContentLoaded', function () {
     const totalForms = document.getElementById('id_form-TOTAL_FORMS');
     const addFormBtn = document.getElementById('add-form');
@@ -7,6 +7,8 @@
 
     const cityOptions = `{{ get_city_options|safe }}`;
     let formIndex = parseInt(totalForms.value);
+    let lastSelectedStationName = '';
+
 
     addFormBtn.addEventListener('click', function () {
       const html = formTemplate
@@ -16,12 +18,60 @@
 
       const formBlock = document.createElement('div');
       formBlock.innerHTML = html;
+
+
+       const fromSelect = formBlock.querySelector(`#id_form-${formIndex}-from_city`);
+       if (fromSelect) {
+         const input = document.createElement('input');
+         input.type = 'text';
+         input.name = fromSelect.name;
+         input.className = fromSelect.className;
+         input.id = fromSelect.id;
+         input.placeholder = 'Введіть місто відправлення';
+
+
+       if (formIndex > 0) {
+         const prevToSelect = document.getElementById(`id_form-${formIndex - 1}-to_city`);
+         if (prevToSelect && prevToSelect.tagName.toLowerCase() === 'select') {
+           const selectedOption = prevToSelect.options[prevToSelect.selectedIndex];
+           if (selectedOption) {
+             input.value = selectedOption.text;
+           }
+         }
+       }
+
+         input.readOnly = true;
+         fromSelect.replaceWith(input);
+       }
+
+       const fromPlaceSelect = formBlock.querySelector(`#id_form-${formIndex}-from_place`);
+        if (fromPlaceSelect) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.name = fromPlaceSelect.name;
+          input.className = fromPlaceSelect.className;
+          input.setAttribute('data-pair', fromPlaceSelect.getAttribute('data-pair'));
+          input.id = fromPlaceSelect.id || `id_form-${formIndex}-from_place`;
+          input.placeholder = 'Введіть зупинку відправлення';
+
+        if (lastSelectedStationName) {
+            input.value = lastSelectedStationName;
+          }
+
+          input.readOnly = true;
+          fromPlaceSelect.replaceWith(input);
+        }
+
+
+
       formContainer.appendChild(formBlock);
 
       totalForms.value = formIndex + 1;
       attachCityListeners(formIndex);
       formIndex++;
     });
+
+
 
     function loadStations(cityId, placeSelect) {
       if (!cityId) return;
@@ -31,10 +81,17 @@
             placeSelect.innerHTML = '<option value="">-- оберіть зупинку --</option>';
             data.stations.forEach(station => {
               const option = document.createElement('option');
-              option.value = station.id;     // value — id станции
-              option.textContent = station.name;  // текст — имя станции
+              option.value = station.id;
+              option.textContent = station.name;
               placeSelect.appendChild(option);
             });
+
+            placeSelect.addEventListener('change', () => {
+                const selectedOption = placeSelect.options[placeSelect.selectedIndex];
+                if (selectedOption) {
+                  lastSelectedStationName = selectedOption.textContent;
+                }
+              });
           });
     }
 
@@ -68,4 +125,4 @@
       attachCityListeners(i);
     }
   });
-</script>
+
