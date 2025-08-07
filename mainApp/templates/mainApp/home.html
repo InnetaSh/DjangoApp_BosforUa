@@ -28,7 +28,7 @@
         <form method="get" action="{% url 'search_tickets' %}">
           {% csrf_token %}
           <div class="form-fields">
-            {% for field in form %}
+            {% for field in search_form_top %}
             <div class="form-row{% if forloop.first %} first{% endif %}">
               {{ field.label_tag }}
               {{ field }}

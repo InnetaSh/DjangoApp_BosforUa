@@ -18,8 +18,9 @@ from .context_data import (
 
 def home(request):
     if request.method == 'POST':
+        search_form_top = TicketForm(request.POST, prefix='form-top')
         form = TicketForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() or search_form_top.is_valid():
             query_string = urlencode({
                 'from_city': form.cleaned_data['from_city'].id,
                 'to_city': form.cleaned_data['to_city'].id,
@@ -31,9 +32,11 @@ def home(request):
             return redirect(search_url)
     else:
         form = TicketForm()
+        search_form_top = TicketForm(prefix='form-top')
 
     return render(request, 'mainApp/home.html', {
         'form': form,
+        'search_form_top': search_form_top,
         'features': features,
         'about': about,
         'routes_blocks': routes_blocks,
