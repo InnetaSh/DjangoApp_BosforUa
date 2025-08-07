@@ -3,7 +3,15 @@
 {% load static %}
 {% block content %}
 <div class="main-wrapper">
-  <h1>Создать рейс</h1>
+    <div class="main-wrapper_ref-section">
+      <a href="{% url 'create_trip' %}" class="{% if request.path == '/create_trip/' %}active{% endif %}">
+        <h2>Створити рейс</h2>
+      </a>
+      <span><h2> / </h2></span>
+      <a href="{% url 'carrier_trips' %}" class="{% if request.path == '/my_trips/' %}active{% endif %}">
+        <h2>Мої рейси</h2>
+      </a>
+    </div>
   <form method="post">
     {% csrf_token %}
     {{ trip_form.as_p }}
@@ -11,42 +19,50 @@
 
     <div class="form-section-add-trip" id="form-container">
       {% for form in formset %}
-        <div class="form-fields-add-trip">
-          <input type="hidden" name="form-{{ forloop.counter0 }}-order" value="{{ forloop.counter }}">
+        <div class="form-fields-add-trip ">
+          <div class="form-fields-add-trip-col">
+             <div class="form-fields-add-trip-col_1-row">
+                  <input type="hidden" name="form-{{ forloop.counter0 }}-order" value="{{ forloop.counter }}">
 
-          <div class="form-row-add-trip">
-            {{ form.from_city.label_tag }}
-            {{ form.from_city }}
+                  <div class="form-row-add-trip">
+                    {{ form.from_city.label_tag }}
+                    {{ form.from_city }}
+                  </div>
+                  <div class="form-row-add-trip">
+                    <label>Зупинка відправлення:</label>
+                    <select name="{{ form.from_place.html_name }}" class="from-place-select" data-pair="from-city-{{ forloop.counter0 }}">
+                      <option value="">-- оберіть зупинку --</option>
+                    </select>
+                  </div>
+                  <div class="form-row-add-trip">
+                    {{ form.departure_datetime.label_tag }}
+                    {{ form.departure_datetime }}
+                  </div>
+             </div>
+             <div class="form-fields-add-trip-col_1-row">
+                <div class="form-row-add-trip">
+                  {{ form.to_city.label_tag }}
+                  {{ form.to_city }}
+                </div>
+                <div class="form-row-add-trip">
+                  <label>Зупинка прибуття:</label>
+                  <select name="{{ form.to_place.html_name }}" class="to-place-select" data-pair="to-city-{{ forloop.counter0 }}">
+                    <option value="">-- оберіть зупинку --</option>
+                  </select>
+                </div>
+                <div class="form-row-add-trip">
+                  {{ form.arrival_datetime.label_tag }}
+                  {{ form.arrival_datetime }}
+                </div>
+            </div>
           </div>
-          <div class="form-row-add-trip">
-            <label>Зупинка відправлення:</label>
-            <select name="{{ form.from_place.html_name }}" class="from-place-select" data-pair="from-city-{{ forloop.counter0 }}">
-              <option value="">-- оберіть зупинку --</option>
-            </select>
-          </div>
-
-          <div class="form-row-add-trip">
-            {{ form.to_city.label_tag }}
-            {{ form.to_city }}
-          </div>
-          <div class="form-row-add-trip">
-            <label>Зупинка прибуття:</label>
-            <select name="{{ form.to_place.html_name }}" class="to-place-select" data-pair="to-city-{{ forloop.counter0 }}">
-              <option value="">-- оберіть зупинку --</option>
-            </select>
-          </div>
-
-          <div class="form-row-add-trip">
-            {{ form.departure_datetime.label_tag }}
-            {{ form.departure_datetime }}
-          </div>
-          <div class="form-row-add-trip">
-            {{ form.arrival_datetime.label_tag }}
-            {{ form.arrival_datetime }}
-          </div>
-          <div class="form-row-add-trip">
-            {{ form.price_travel.label_tag }}
-            {{ form.price_travel }}
+          <div class="form-fields-add-trip-col">
+             <div class="form-fields-add-trip-col_2-row">
+                <div class="form-row-add-trip">
+                  {{ form.price_travel.label_tag }}
+                  {{ form.price_travel }}
+                </div>
+            </div>
           </div>
         </div>
       {% endfor %}
@@ -62,57 +78,69 @@
 
   <template id="form-template">
     <div class="form-fields-add-trip">
-      <input type="hidden" name="form-__prefix__-order" value="__ORDER__">
-      <div class="form-row-add-trip">
-        <label>Місто відправлення:</label>
-        <input type="text"
-               name="form-__prefix__-from_city"
-               class="from-city from-city-__prefix__"
-               id="id_form-__prefix__-from_city"
-               placeholder="Введіть місто відправлення"
-               readonly
-               value="__FROM_CITY_TEXT__">
-      </div>
-      <div class="form-row-add-trip">
-        <label>Зупинка відправлення:</label>
-        <input type="text"
-               name="form-__prefix__-from_place"
-               class="from-place-select"
-               data-pair="from-city-__prefix__"
-               id="id_form-__prefix__-from_place"
-               placeholder="Введіть зупинку відправлення"
-               readonly
-               value="__FROM_PLACE_TEXT__">
-      </div>
+       <div class="form-fields-add-trip-col">
+             <div class="form-fields-add-trip-col_1-row">
 
-      <div class="form-row-add-trip">
-        <label>Місто прибуття:</label>
-        <select name="form-__prefix__-to_city" class="to-city to-city-__prefix__" id="id_form-__prefix__-to_city">
-          __CITY_OPTIONS__
-        </select>
-      </div>
-      <div class="form-row-add-trip">
-        <label>Зупинка прибуття:</label>
-        <select name="form-__prefix__-to_place"
-                class="to-place-select"
-                data-pair="to-city-__prefix__"
-                id="id_form-__prefix__-to_place">
-          <option value="">-- оберіть зупинку --</option>
-        </select>
-      </div>
 
-      <div class="form-row-add-trip">
-        <label for="id_form-__prefix__-departure_datetime">Время отправления:</label>
-        <input type="datetime-local" name="form-__prefix__-departure_datetime" id="id_form-__prefix__-departure_datetime">
-      </div>
-      <div class="form-row-add-trip">
-        <label for="id_form-__prefix__-arrival_datetime">Время прибытия:</label>
-        <input type="datetime-local" name="form-__prefix__-arrival_datetime" id="id_form-__prefix__-arrival_datetime">
-      </div>
-      <div class="form-row-add-trip">
-        <label for="id_form-__prefix__-price_travel">Цена:</label>
-        <input type="number" name="form-__prefix__-price_travel" id="id_form-__prefix__-price_travel" step="0.01">
-      </div>
+                  <input type="hidden" name="form-__prefix__-order" value="__ORDER__">
+                  <div class="form-row-add-trip">
+                    <label>Місто відправлення:</label>
+                    <input type="text"
+                           name="form-__prefix__-from_city"
+                           class="from-city from-city-__prefix__"
+                           id="id_form-__prefix__-from_city"
+                           placeholder="Введіть місто відправлення"
+                           readonly
+                           value="__FROM_CITY_TEXT__">
+                  </div>
+                  <div class="form-row-add-trip">
+                    <label>Зупинка відправлення:</label>
+                    <input type="text"
+                           name="form-__prefix__-from_place"
+                           class="from-place-select"
+                           data-pair="from-city-__prefix__"
+                           id="id_form-__prefix__-from_place"
+                           placeholder="Введіть зупинку відправлення"
+                           readonly
+                           value="__FROM_PLACE_TEXT__">
+                  </div>
+                  <div class="form-row-add-trip">
+                    <label for="id_form-__prefix__-departure_datetime">Время отправления:</label>
+                    <input type="datetime-local" name="form-__prefix__-departure_datetime" id="id_form-__prefix__-departure_datetime">
+                  </div>
+             </div>
+             <div class="form-fields-add-trip-col_1-row">
+
+                  <div class="form-row-add-trip">
+                    <label>Місто прибуття:</label>
+                    <select name="form-__prefix__-to_city" class="to-city to-city-__prefix__" id="id_form-__prefix__-to_city">
+                      __CITY_OPTIONS__
+                    </select>
+                  </div>
+                  <div class="form-row-add-trip">
+                    <label>Зупинка прибуття:</label>
+                    <select name="form-__prefix__-to_place"
+                            class="to-place-select"
+                            data-pair="to-city-__prefix__"
+                            id="id_form-__prefix__-to_place">
+                      <option value="">-- оберіть зупинку --</option>
+                    </select>
+                  </div>
+
+                  <div class="form-row-add-trip">
+                    <label for="id_form-__prefix__-arrival_datetime">Время прибытия:</label>
+                    <input type="datetime-local" name="form-__prefix__-arrival_datetime" id="id_form-__prefix__-arrival_datetime">
+                  </div>
+             </div>
+           </div>
+          <div class="form-fields-add-trip-col">
+             <div class="form-fields-add-trip-col_2-row">
+                  <div class="form-row-add-trip">
+                    <label for="id_form-__prefix__-price_travel">Цена:</label>
+                    <input type="number" name="form-__prefix__-price_travel" id="id_form-__prefix__-price_travel" step="0.01">
+                  </div>
+             </div>
+          </div>
     </div>
   </template>
 </div>

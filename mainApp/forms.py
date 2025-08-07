@@ -43,21 +43,21 @@ class RouteForm(forms.ModelForm):
 
 
 class TripRouteWithRouteForm(forms.Form):
-    from_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Отправление:")
+    from_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Відправлення:")
     from_place = forms.CharField(max_length=250, label="Місце відправлення")
 
-    to_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Прибытие:")
+    to_city = forms.ModelChoiceField(queryset=City.objects.all(), label="Прибуття:")
     to_place = forms.CharField(max_length=250, label="Місце прибуття")
 
     departure_datetime = forms.DateTimeField(
-        label="Время отправления",
+        label="Час відправлення",
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})
     )
     arrival_datetime = forms.DateTimeField(
-        label="Время прибытия",
+        label="Час прибуття",
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'})
     )
-    price_travel = forms.DecimalField(max_digits=10, decimal_places=2, label="Цена")
+    price_travel = forms.DecimalField(max_digits=10, decimal_places=2, label="Ціна")
     order = forms.IntegerField(label="Порядок")
 
 TripRouteWithRouteFormSet = formset_factory(TripRouteWithRouteForm, extra=1, can_delete=False)

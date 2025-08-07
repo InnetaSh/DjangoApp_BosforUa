@@ -118,9 +118,34 @@ def get_stations(request):
     stations = [{"id": s.id, "name": s.name} for s in stations_qs]
     return JsonResponse({"stations": stations})
 
+
+
+
 def get_city_options():
     return ''.join([f'<option value="{c.id}">{c.name}</option>' for c in City.objects.all()])
 
+def carrier_trips(request):
+    if not request.user.isCarrier:
+        return redirect('home')
+
+
+    carrier_trips = Trip.objects.filter(carrier=request.user)
+    found_trips = []
+    for trip in carrier_trips:
+        found_trips.append({
+            'trip': trip,
+            'routes': trip.get_ordered_routes()
+        })
+
+
+    return render(request, 'mainApp/carrier_trips.html', {
+        'carrier_trips': found_trips,
+        'features': features,
+        'about': about,
+        'routes_blocks': routes_blocks,
+        'footer_blocks': footer_blocks,
+        'footer_blocks_img': footer_blocks_img
+    })
 
 def create_trip_view(request):
     if request.method == 'POST':
@@ -173,13 +198,11 @@ def create_trip_view(request):
         formset = TripRouteWithRouteFormSet()
 
         for i, form in enumerate(formset.forms):
-            # Например, в поле from_city
             if 'from_city' in form.fields:
                 current_classes = form.fields['from_city'].widget.attrs.get('class', '')
                 new_classes = f"{current_classes} from-city from-city-{i}".strip()
                 form.fields['from_city'].widget.attrs['class'] = new_classes
 
-            # И в поле to_city
             if 'to_city' in form.fields:
                 current_classes = form.fields['to_city'].widget.attrs.get('class', '')
                 new_classes = f"{current_classes} to-city to-city-{i}".strip()
