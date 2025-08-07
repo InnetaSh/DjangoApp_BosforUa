@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from .models import City, Ticket, Trip, Route, TripRoute, Station
@@ -169,11 +169,19 @@ def create_trip_view(request):
                     print(f"Форма #{i} невалидна: {form.errors}")
                     continue
 
+                from_place_id = form.cleaned_data['from_place']
+                to_place_id = form.cleaned_data['to_place']
+
+
+                from_place = get_object_or_404(Station, id=from_place_id)
+                to_place = get_object_or_404(Station, id=to_place_id)
+
+
                 route = Route.objects.create(
                     from_city=form.cleaned_data['from_city'],
                     to_city=form.cleaned_data['to_city'],
-                    from_place=form.cleaned_data['from_place'],
-                    to_place=form.cleaned_data['to_place'],
+                    from_place=from_place,
+                    to_place=to_place,
                     departure_datetime=form.cleaned_data['departure_datetime'],
                     arrival_datetime=form.cleaned_data['arrival_datetime'],
                     price_travel=form.cleaned_data['price_travel'],
@@ -186,7 +194,7 @@ def create_trip_view(request):
                     order=form.cleaned_data['order']
                 )
 
-            return redirect('home')
+            return redirect('carrier_trips')
 
         else:
             print("❌ Ошибки в TripForm:", trip_form.errors.as_data())

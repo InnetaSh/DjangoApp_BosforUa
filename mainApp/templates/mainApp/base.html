@@ -27,10 +27,17 @@
             <i class="fas fa-headset"></i>
             <span>Служба підтримки</span>
           </a>
-          <a href="{% url 'register' %}" class="menu-item">
-            <i class="fas fa-user"></i>
-            <span>Особистий кабінет</span>
-          </a>
+         {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="menu-item">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Вихід</span>
+            </a>
+          {% else %}
+            <a href="{% url 'register' %}" class="menu-item">
+              <i class="fas fa-user"></i>
+              <span>Особистий кабінет</span>
+            </a>
+          {% endif %}
         </div>
       </div>
     </nav>

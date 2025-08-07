@@ -8,6 +8,18 @@ class City(models.Model):
         return self.name
 
 
+
+class Station(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Станція")  # Убрал unique=True
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='stations', verbose_name="Місто")
+
+    class Meta:
+        unique_together = ('city', 'name')
+
+    def __str__(self):
+        return self.name
+
+
 class Ticket(models.Model):
     from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='ticket_departures', verbose_name="З міста")
     to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='ticket_arrivals', verbose_name="У місто")
@@ -19,13 +31,16 @@ class Ticket(models.Model):
 
 
 
-
-
 class Route(models.Model):
-    from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_departures', verbose_name="З міста")
+    from_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_departures',
+                                  verbose_name="З міста")
     to_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='route_arrivals', verbose_name="У місто")
-    from_place = models.CharField(verbose_name="Місце відправлення", max_length=250, default="Неизвестно")
-    to_place = models.CharField(verbose_name="Місце прибуття", max_length=250, default="Неизвестно")
+
+    from_place = models.ForeignKey(Station, on_delete=models.CASCADE, related_name='routes_from',
+                                   verbose_name="Зупинка відправлення")
+    to_place = models.ForeignKey(Station, on_delete=models.CASCADE, related_name='routes_to',
+                                 verbose_name="Зупинка прибуття")
+
     departure_datetime = models.DateTimeField(verbose_name="Дата та час відправлення")
     arrival_datetime = models.DateTimeField(verbose_name="Дата та час прибуття")
     price_travel = models.DecimalField(verbose_name="Ціна поїздки", max_digits=10, decimal_places=2)
@@ -94,10 +109,5 @@ class TripRoute(models.Model):
 
 
 
-class Station(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='stations')
-    name = models.CharField(max_length=150, verbose_name="Назва зупинки")
 
-    def __str__(self):
-        return f"{self.name} ({self.city.name})"
 

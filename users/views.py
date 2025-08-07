@@ -11,7 +11,7 @@ def register_carrier(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, 'Реєстрація перевізника пройшла успішно!')
-            return redirect('create_trip_view')
+            return redirect('create_trip')
     else:
         form = CarrierRegisterForm()
     return render(request, 'users/register_carrier.html', {'form': form})
@@ -21,9 +21,12 @@ def register_carrier(request):
 @login_required
 def profile_carrier(request):
 
-    return redirect('create_trip_view')
+    return redirect('create_trip')
 
 
+
+def logout(request):
+    return redirect('home')
 
 def register(request):
     if request.method == 'POST':
