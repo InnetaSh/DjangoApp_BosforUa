@@ -45,29 +45,26 @@
           <a href="{% url 'profile' %}" class="subtitle-base {% if request.path == '/profile/' %}active{% endif %}">
             <h4>Майбутні поїздки</h4>
           </a>
-          <a href="{% url 'carrier_trips' %}" class="subtitle-base {% if request.path == '/carrier_trips/' %}active{% endif %}">
+          <a href="{% url 'my_trips' %}" class="subtitle-base {% if request.path == '/my_trips/' %}active{% endif %}">
             <h4>Мої поїздки</h4>
           </a>
-              <a href="{% url 'create_trip' %}" class="subtitle-base {% if request.path == '/create_trip/' %}active{% endif %}">
+              <a href="{% url 'profile_info' %}" class="subtitle-base {% if request.path == '/profile_info/' %}active{% endif %}">
             <h4>Контактна інформація</h4>
           </a>
-          <a href="{% url 'carrier_trips' %}" class="subtitle-base {% if request.path == '/carrier_trips/' %}active{% endif %}">
+          <a href="{% url 'profile_info' %}" class="subtitle-base {% if request.path == '/profile_info/' %}active{% endif %}">
             <h4>Відгуки</h4>
           </a>
         </div>
       </nav>
-      <div class="flex-column__center mrg-t50 ">
-          <div class="title-base section-title">
-              У вас поки немає майбутніх поїздок, {{ user.username }}
-          </div>
-            <div class="title-subbase section-subtitle">
+      <div class="flex-column__center mrg-t50 {% if request.resolver_match.url_name == 'my_trips' or request.resolver_match.url_name == 'profile_info' %}non-display{% endif %}">
+            <div class="title-subbase section-subtitle ">
               Щоб знайти квитки на автобус, виберіть напрямок, дату поїздки та кількість пасажирів
           </div>
       </div>
-<div class="main-wrapper__profile  bg-white shadow-small {% if request.resolver_match.url_name == 'my_trips' %}non-display{% endif %}">
+<div class="main-wrapper__profile  bg-white shadow-small {% if request.resolver_match.url_name == 'my_trips' or request.resolver_match.url_name == 'profile_info'%}non-display{% endif %}">
       <div class="form-section__profile ">
 
-        <form method="post" action="{% url 'my_trips' %}">>
+        <form method="post" action="{% url 'my_trips' %}" class="form">
           {% csrf_token %}
           <div class="form-fields">
             {% for field in form %}
@@ -87,27 +84,6 @@
       </div>
     </div>
 
-    <div class="main-wrapper  showBlock">
-      <div class="form-fixed-top">
-        <form method="get" action="{% url 'search_tickets' %}">
-          {% csrf_token %}
-          <div class="form-fields">
-            {% for field in search_form_top %}
-            <div class="form-row{% if forloop.first %} first{% endif %}">
-              {{ field.label_tag }}
-              {{ field }}
-              {{ field.errors }}
-            </div>
-            {% endfor %}
-          </div>
-          <div class="form-submit">
-            <div class="form-submit">
-              <button type="submit" class="btn  btn-primar">🔍 Знайти квитки</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
     <div class="content-section">
 
     </div>
@@ -117,28 +93,6 @@
 
     {% endblock %}
     </div>
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const formWrapperTop = document.querySelector('.form-fixed-top');
-      const wrapper = document.querySelector('.showBlock');
-
-      function checkPosition() {
-        const rect = wrapper.getBoundingClientRect();
-
-        if (rect.top <= 0) {
-          formWrapperTop.classList.add('visible');
-        } else {
-          formWrapperTop.classList.remove('visible');
-        }
-      }
-
-      window.addEventListener('scroll', checkPosition);
-      window.addEventListener('resize', checkPosition);
-    });
-  </script>
 </body>
 
 </html>

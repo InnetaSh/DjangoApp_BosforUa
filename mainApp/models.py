@@ -117,6 +117,7 @@ class ByeTickets(models.Model):
         verbose_name="Пасажир",
         limit_choices_to={'isCarrier': False}
     )
+    count_passenger = models.PositiveIntegerField("Кількість місць", default=1)
 
     def get_ordered_routes(self):
         return self.trip.trip_routes.select_related('route').order_by('order')
@@ -125,7 +126,8 @@ class ByeTickets(models.Model):
         return (
             f"Пасажир: {self.user.get_full_name() or self.user.username} | "
             f"Рейс №{self.trip.number_trip} | "
-            f"Маршрут: {self.route.from_city} → {self.route.to_city}"
+            f"Маршрут: {self.route.from_city} → {self.route.to_city} | "
+            f"Кількість місць: {self.count_passenger}"
         )
 
 

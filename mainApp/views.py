@@ -62,6 +62,7 @@ def search_tickets(request):
     from_city=''
     to_city = ''
     date_travel =''
+    count_passenger=''
 
     if form.is_valid():
         print("Форма валидна")
@@ -117,6 +118,7 @@ def search_tickets(request):
             'trips': found_trips,
             'to_city':to_city,
             'from_city':from_city,
+            'count_passenger':count_passenger,
             'date_travel':date_travel,
             'features': features,
             'about': about,
@@ -130,6 +132,7 @@ def search_tickets(request):
             'trips': found_trips,
             'to_city':to_city,
             'from_city':from_city,
+            'count_passenger': count_passenger,
             'date_travel':date_travel,
             'features': features,
             'about': about,
@@ -178,22 +181,40 @@ def my_trips(request):
     if request.method == 'POST':
         trip_id = request.POST.get("trip_id")
         route_id = request.POST.get("route_id")
+        count_passenger = request.POST.get("count_passenger",1)
 
         trip = Trip.objects.get(id=trip_id)
         route = Route.objects.get(id=route_id)
+        if trip.free_count_passengers >= count_passenger:
+
+            ByeTickets.objects.create(
+                user=request.user,
+                trip=trip,
+                route=route,
+                count_passenger=count_passenger
+            )
+
+            trip.free_count_passengers -= count_passenger
+            trip.save()
+        else:
+
+            redirect('search_tickets')
 
         ByeTickets.objects.create(
             user=request.user,
             trip=trip,
-            route=route
+            route=route,
+            count_passenger = count_passenger
         )
 
     my_trips = ByeTickets.objects.filter(user=request.user)
     found_trips = []
-    for trip in my_trips:
+    for ticket in my_trips:
+        routes = list(ticket.trip.trip_routes.select_related('route').order_by('order'))
         found_trips.append({
-            'trip': trip,
-            'routes': trip.get_ordered_routes()
+            'trip': ticket.trip,
+            'routes': routes,
+            'count_passenger': ticket.count_passenger
         })
 
     return render(request, 'mainApp/profile_my_trips.html', {
@@ -283,3 +304,8 @@ def create_trip_view(request):
         'footer_blocks': footer_blocks,
         'footer_blocks_img': footer_blocks_img
     })
+
+
+def profile_info(request):
+
+    return render(request, 'mainApp/profile_info.html')
