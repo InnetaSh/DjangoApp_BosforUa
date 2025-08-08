@@ -1,0 +1,144 @@
+{% extends "mainApp/profile.html" %}
+{% load static %}
+{% block content %}
+
+<div class="main-wrapper search-tickets-section ">
+
+    {% if trips %}
+   {% for trip_data in trips %}
+    {% with trip=trip_data.trip route_list=trip_data.routes %}
+      <div class="detail-trip-container">
+        {% if trip.has_eticket %}
+          <span type="eticket" class="badge-info">
+            Без роздруковування
+          </span>
+        {% endif %}
+
+      <div class="detail-trip-item">
+            <div  class="detail-trip-item">
+
+               <div class="detail-trip-subtitle carrier-mobile">
+                  {{ trip.carrier }}
+                </div>
+                <div class="detail-trip-wrapper">
+                     <div class="detail-trip-wrapper-col-left">
+                            <div  class="detail-trip-grid ">
+                                <div  class="detail-trip-item-col">
+                                    <div class="flex-start">
+                                       <div class="detail-trip-title ">
+                                          {% for r in route_list %}
+                                         {{  r.route.departure_datetime|date:"H:i" }}
+                                          {% endfor %}
+                                      </div>
+                                         <div class="detail-trip-grey-title ">
+                                          {% for r in trip_data.routes %}
+                                            {{ r.duration }}
+                                          {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="detail-trip-subtitle ">
+                                      {% for r in route_list %}
+                                     {{  r.route.from_place }}
+                                      {% endfor %}
+                                  </div>
+                                </div>
+                                <div  class="detail-trip-item-col">
+                               <div class="detail-trip-title ">
+                                  {% for r in route_list %}
+                                 {{  r.route.arrival_datetime|date:"H:i" }}
+                                  {% endfor %}
+                              </div>
+                                 <div class="detail-trip-subtitle ">
+                                  {% for r in route_list %}
+                                 {{  r.route.to_place }}
+                                  {% endfor %}
+                              </div>
+                            </div>
+                            </div>
+                            <div  class="detail-trip-grey-segment ">
+                                <div class="detail-trip-subtitle red-title">
+                                   <i class="fas fa-chevron-down" style="color: red; margin-right: 5px;"></i>
+                                    Детальніше:
+                                </div>
+
+                                 <div class="detail-trip-subtitle ">
+                                  Перевізник: {{ trip.carrier }}
+                                </div>
+                                <div class="detail-trip-subtitle ">
+                                    <i class="fas fa-camera" style="color: red; margin-right: 5px;"></i>
+                                  Автобус: {{ trip.bus_description }}
+                                </div>
+                            </div>
+                     </div>
+                     <div class="detail-trip-wrapper-col-right">
+                            <div class="vertical-dashed-line"></div>
+                            <div class="detail-trip-grid ">
+                                <div class="price-desktop">
+                                    <div class="detail-trip-title ">
+                                          {% for r in route_list %}
+                                              {{  r.route.price_travel }}
+                                          {% endfor %}
+                                    </div>
+                                    <div class="subtitle-base">грн.</div>
+                                </div>
+                    <div class="flex-column">
+                                <a href="{% url 'my_trips' %}"  class="btn-left-price">
+                                     <span class="btn-price-desktop">
+                                          Обрати
+                                     </span>
+                                     <span class="btn-price-mobile">
+                                         {% for r in route_list %}
+                                              {{  r.route.price_travel }} грн.
+                                          {% endfor %}
+
+                                     </span>
+                                </a>
+                                 <div class="detail-trip-subtitle red-title">
+                                            {{ trip.free_count_passengers  }} місця
+                                </div>
+                     </div>
+                            </div>
+                             <div  class="detail-trip-grey-segment ">
+                                <div class="trip-icons">
+                                    {% if trip.has_air_conditioning %}
+                                  <i class="fas fa-fan" title="Кондиціонер"></i>
+                                    {% endif %}
+                                    {% if trip.has_wifi %}
+                                  <i class="fas fa-wifi" title="Wi-Fi"></i>
+                                     {% endif %}
+                                    {% if trip.has_paid_socket %}
+                                  <i class="fas fa-plug" title="Розетка (платно)"></i>
+                                     {% endif %}
+                                    {% if trip.has_free_socket %}
+                                  <i class="fas fa-plug" title="Розетка (безкоштовно)"></i>
+                                     {% endif %}
+                                    {% if trip.has_seat_belts %}
+                                  <i class="fas fa-user-shield" title="Ремені безпеки"></i>
+                                     {% endif %}
+                                    {% if trip.has_wc %}
+                                   <span class="wc-icon" title="Туалет">WC</span>
+                                     {% endif %}
+                                </div>
+                            </div>
+
+                     </div>
+                </div>
+                  </div>
+
+</div>
+            </div>
+    {% endwith %}
+{% endfor %}
+{% else %}
+  <div class="detail-trip-item">
+    <p>  У вас поки немає майбутніх поїздок, {{ user.username }}.</p>
+  </div>
+
+
+          {% endif %}
+          </div>
+</div>
+
+
+
+{% endblock content %}

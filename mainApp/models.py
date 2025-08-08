@@ -107,6 +107,28 @@ class TripRoute(models.Model):
     def __str__(self):
         return f"{self.trip} – {self.route} (#{self.order})"
 
+class ByeTickets(models.Model):
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='bought_tickets', verbose_name="Рейс")
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, verbose_name="Маршрут")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='bought_tickets',
+        verbose_name="Пасажир",
+        limit_choices_to={'isCarrier': False}
+    )
+
+    def get_ordered_routes(self):
+        return self.trip.trip_routes.select_related('route').order_by('order')
+
+    def __str__(self):
+        return (
+            f"Пасажир: {self.user.get_full_name() or self.user.username} | "
+            f"Рейс №{self.trip.number_trip} | "
+            f"Маршрут: {self.route.from_city} → {self.route.to_city}"
+        )
+
+
 
 
 

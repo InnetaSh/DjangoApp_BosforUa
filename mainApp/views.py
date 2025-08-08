@@ -1,10 +1,11 @@
 from urllib.parse import urlencode
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import City, Ticket, Trip, Route, TripRoute, Station
+from .models import City, Ticket, Trip, Route, TripRoute, Station, ByeTickets
 from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
 from datetime import timedelta
 
@@ -51,6 +52,10 @@ def format_duration(duration):
     minutes = total_minutes % 60
     return f"{hours} год. {minutes} хв"
 
+
+
+
+
 def search_tickets(request):
     form = TicketForm(request.GET or None)
     found_trips = []
@@ -59,6 +64,7 @@ def search_tickets(request):
     date_travel =''
 
     if form.is_valid():
+        print("Форма валидна")
         from_city = form.cleaned_data['from_city']
         to_city = form.cleaned_data['to_city']
         date_travel = form.cleaned_data['date_travel']
@@ -74,15 +80,19 @@ def search_tickets(request):
                 for i, tr in enumerate(routes):
                     print(f"Checking route {i}: order={tr.order} from {tr.route.from_city} to {tr.route.to_city}")
 
-                    if from_index is None:
+                    for i, tr in enumerate(routes):
                         if tr.route.from_city == from_city and tr.route.departure_datetime.date() == date_travel:
                             from_index = i
                             print(f"Found from_index at index {i}, order {tr.order}")
-                    else:
-                        if tr.route.to_city == to_city and tr.order >= routes[from_index].order:
-                            to_index = i
-                            print(f"Found to_index at index {i}, order {tr.order}")
                             break
+
+                    if from_index is not None:
+                        for j in range(from_index, len(routes)):
+                            tr = routes[j]
+                            if tr.route.to_city == to_city:
+                                to_index = j
+                                print(f"Found to_index at index {j}, order {tr.order}")
+                                break
 
 
             if from_index is not None and to_index is not None and from_index <= to_index:
@@ -100,18 +110,33 @@ def search_tickets(request):
                     'trip': trip,
                     'routes': segment_routes
                 })
-    return render(request, 'mainApp/search_tickets.html', {
-        'form': form,
-        'trips': found_trips,
-        'to_city':to_city,
-        'from_city':from_city,
-        'date_travel':date_travel,
-        'features': features,
-        'about': about,
-        'routes_blocks': routes_blocks,
-        'footer_blocks': footer_blocks,
-        'footer_blocks_img': footer_blocks_img
-    })
+
+    if request.user.is_authenticated:
+        return render(request, 'mainApp/profile_future_trips.html', {
+            'form': form,
+            'trips': found_trips,
+            'to_city':to_city,
+            'from_city':from_city,
+            'date_travel':date_travel,
+            'features': features,
+            'about': about,
+            'routes_blocks': routes_blocks,
+            'footer_blocks': footer_blocks,
+            'footer_blocks_img': footer_blocks_img
+        })
+    else:
+        return render(request, 'mainApp/search_tickets.html', {
+            'form': form,
+            'trips': found_trips,
+            'to_city':to_city,
+            'from_city':from_city,
+            'date_travel':date_travel,
+            'features': features,
+            'about': about,
+            'routes_blocks': routes_blocks,
+            'footer_blocks': footer_blocks,
+            'footer_blocks_img': footer_blocks_img
+        })
 
 
 
@@ -131,7 +156,6 @@ def carrier_trips(request):
     if not request.user.isCarrier:
         return redirect('home')
 
-
     carrier_trips = Trip.objects.filter(carrier=request.user)
     found_trips = []
     for trip in carrier_trips:
@@ -140,9 +164,40 @@ def carrier_trips(request):
             'routes': trip.get_ordered_routes()
         })
 
-
     return render(request, 'mainApp/carrier_trips.html', {
         'carrier_trips': found_trips,
+        'features': features,
+        'about': about,
+        'routes_blocks': routes_blocks,
+        'footer_blocks': footer_blocks,
+        'footer_blocks_img': footer_blocks_img
+    })
+
+
+def my_trips(request):
+    if request.method == 'POST':
+        trip_id = request.POST.get("trip_id")
+        route_id = request.POST.get("route_id")
+
+        trip = Trip.objects.get(id=trip_id)
+        route = Route.objects.get(id=route_id)
+
+        ByeTickets.objects.create(
+            user=request.user,
+            trip=trip,
+            route=route
+        )
+
+    my_trips = ByeTickets.objects.filter(user=request.user)
+    found_trips = []
+    for trip in my_trips:
+        found_trips.append({
+            'trip': trip,
+            'routes': trip.get_ordered_routes()
+        })
+
+    return render(request, 'mainApp/profile_my_trips.html', {
+        'trips': found_trips,
         'features': features,
         'about': about,
         'routes_blocks': routes_blocks,
