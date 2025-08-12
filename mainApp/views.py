@@ -1,12 +1,11 @@
 from urllib.parse import urlencode
 
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import City, Ticket, Trip, Route, TripRoute, Station, ByeTickets
-from .forms import TicketForm,  RouteForm, TripForm, TripRouteWithRouteFormSet
+from .models import City, Trip, Route, TripRoute, Station, ByeTickets
+from .forms import TicketForm, TripForm, TripRouteWithRouteFormSet
 from datetime import timedelta
 
 from .context_data import (
@@ -27,7 +26,6 @@ def home(request):
         elif form_bottom.is_valid():
             cleaned_data = form_bottom.cleaned_data
         else:
-            # Формы не валидны — возвращаем на главную
             return redirect('home')
 
         query_string = urlencode({

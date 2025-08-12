@@ -26,7 +26,7 @@
             Без роздруковування
           </span>
         {% endif %}
-        <div  class="carrier-trip-segment">
+       <div class="carrier-trip-segment {% if not trip.has_eticket %}badge-info-hidden{% endif %}">
             <div class="carrier-trip-wrapper">
                  <div class="carrier-trip-wrapper-col-left">
                         {% for route in route_list %}

@@ -813,6 +813,9 @@ search-tickets
   padding: 6px 10px 8px 10px;
   font-size: 13px;
 }
+.badge-info-hidden {
+    padding-top:20px;
+}
 
 
 .detail-trip-item {
