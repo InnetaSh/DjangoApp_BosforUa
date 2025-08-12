@@ -200,12 +200,7 @@ def my_trips(request):
 
             redirect('search_tickets')
 
-        ByeTickets.objects.create(
-            user=request.user,
-            trip=trip,
-            route=route,
-            count_passenger = count_passenger
-        )
+
 
     my_trips = ByeTickets.objects.filter(user=request.user)
     found_trips = []
