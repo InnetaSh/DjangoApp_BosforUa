@@ -19,18 +19,26 @@ from .context_data import (
 
 def home(request):
     if request.method == 'POST':
-        search_form_top = TicketForm(request.POST, prefix='form-top')
-        form = TicketForm(request.POST)
-        if form.is_valid() or search_form_top.is_valid():
-            query_string = urlencode({
-                'from_city': form.cleaned_data['from_city'].id,
-                'to_city': form.cleaned_data['to_city'].id,
-                'date_travel': form.cleaned_data['date_travel'].isoformat(),
-                'count_passenger': form.cleaned_data['count_passenger']
-            })
+        form_top = TicketForm(request.POST, prefix='form-top')
+        form_bottom = TicketForm(request.POST)
 
-            search_url = f"{reverse('search_tickets')}?{query_string}"
-            return redirect(search_url)
+        if form_top.is_valid():
+            cleaned_data = form_top.cleaned_data
+        elif form_bottom.is_valid():
+            cleaned_data = form_bottom.cleaned_data
+        else:
+            # Формы не валидны — возвращаем на главную
+            return redirect('home')
+
+        query_string = urlencode({
+            'from_city': cleaned_data['from_city'].id,
+            'to_city': cleaned_data['to_city'].id,
+            'date_travel': cleaned_data['date_travel'].isoformat(),
+            'count_passenger': cleaned_data['count_passenger']
+        })
+
+        search_url = f"{reverse('search_tickets')}?{query_string}"
+        return redirect(search_url)
     else:
         form = TicketForm()
         search_form_top = TicketForm(prefix='form-top')
@@ -52,10 +60,6 @@ def format_duration(duration):
     minutes = total_minutes % 60
     return f"{hours} год. {minutes} хв"
 
-
-
-
-
 def search_tickets(request):
     form = TicketForm(request.GET or None)
     found_trips = []
@@ -63,9 +67,12 @@ def search_tickets(request):
     to_city = ''
     date_travel =''
     count_passenger=''
-
+    print(request.method)
+    print(request.GET)
+    print(request.POST)
     if form.is_valid():
         print("Форма валидна")
+
         from_city = form.cleaned_data['from_city']
         to_city = form.cleaned_data['to_city']
         date_travel = form.cleaned_data['date_travel']
@@ -78,22 +85,18 @@ def search_tickets(request):
 
             from_index, to_index = None, None
             for i, tr in enumerate(routes):
-                for i, tr in enumerate(routes):
-                    print(f"Checking route {i}: order={tr.order} from {tr.route.from_city} to {tr.route.to_city}")
+                if tr.route.from_city == from_city and tr.route.departure_datetime.date() == date_travel:
+                    from_index = i
+                    print(f"Found from_index at index {i}, order {tr.order}")
+                    break
 
-                    for i, tr in enumerate(routes):
-                        if tr.route.from_city == from_city and tr.route.departure_datetime.date() == date_travel:
-                            from_index = i
-                            print(f"Found from_index at index {i}, order {tr.order}")
-                            break
-
-                    if from_index is not None:
-                        for j in range(from_index, len(routes)):
-                            tr = routes[j]
-                            if tr.route.to_city == to_city:
-                                to_index = j
-                                print(f"Found to_index at index {j}, order {tr.order}")
-                                break
+            if from_index is not None:
+                for j in range(from_index, len(routes)):
+                    tr = routes[j]
+                    if tr.route.to_city == to_city:
+                        to_index = j
+                        print(f"Found to_index at index {j}, order {tr.order}")
+                        break
 
 
             if from_index is not None and to_index is not None and from_index <= to_index:
@@ -142,14 +145,11 @@ def search_tickets(request):
         })
 
 
-
 def get_stations(request):
     city_id = request.GET.get('city_id')
     stations_qs = Station.objects.filter(city_id=city_id)
     stations = [{"id": s.id, "name": s.name} for s in stations_qs]
     return JsonResponse({"stations": stations})
-
-
 
 
 def get_city_options():
@@ -179,9 +179,11 @@ def carrier_trips(request):
 
 def my_trips(request):
     if request.method == 'POST':
+
         trip_id = request.POST.get("trip_id")
+        print("trip_id:", trip_id)
         route_id = request.POST.get("route_id")
-        count_passenger = request.POST.get("count_passenger",1)
+        count_passenger = int(request.POST.get("count_passenger", 1))
 
         trip = Trip.objects.get(id=trip_id)
         route = Route.objects.get(id=route_id)

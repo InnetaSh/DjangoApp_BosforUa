@@ -1,7 +1,7 @@
 {% extends "mainApp/base.html" %}
 {% load static %}
 {% block content %}
- <div class="main-wrapper  bg-primary">
+ <div class="main-wrapper  bg-primary main-wrapper__mobile">
       <div class=" form-section">
         <form method="post">
           {% csrf_token %}
@@ -114,6 +114,7 @@
                             </div>
                 <div class="flex-column">
                             <div class="btn-left-price">
+                                <a href="{% url 'register' %}">
                                  <span class="btn-price-desktop">
                                       Обрати
                                  </span>
@@ -123,8 +124,9 @@
                                       {% endfor %}
 
                                  </span>
+                                </a>
                             </div>
-                             <div class="detail-trip-subtitle red-title">
+                             <div class="detail-trip-subtitle red-title count_passengers-mobile">
                                         {{ trip.free_count_passengers  }} місця
                             </div>
                  </div>

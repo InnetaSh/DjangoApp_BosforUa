@@ -64,7 +64,7 @@
 <div class="main-wrapper__profile  bg-white shadow-small {% if request.resolver_match.url_name == 'my_trips' or request.resolver_match.url_name == 'profile_info'%}non-display{% endif %}">
       <div class="form-section__profile ">
 
-        <form method="post" action="{% url 'my_trips' %}" class="form">
+        <form method="post">
           {% csrf_token %}
           <div class="form-fields">
             {% for field in form %}

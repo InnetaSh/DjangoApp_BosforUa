@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
  <div class="main-wrapper  bg-primary main-wrapper__mobile">
-      <div class=" form-section">
+      <div class="form-section">
         <form method="post">
           {% csrf_token %}
           <div class="form-fields">
@@ -25,7 +25,7 @@
 
     <div class="main-wrapper  bg-white showBlock">
       <div class="form-fixed-top">
-        <form method="get" action="{% url 'search_tickets' %}">
+       <form method="post">
           {% csrf_token %}
           <div class="form-fields-top">
             {% for field in search_form_top %}
